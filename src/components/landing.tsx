@@ -1,0 +1,22 @@
+import React from "react";
+
+function Landing() {
+  return (
+    <div className="w-full lg:w-2/3 mx-auto my-10 flex flex-col justify-center items-center text-md">
+      <p className="mt-10 m-2"> PERP Trading Simplified</p>
+      <p
+        className="text-5xl font-extrabold text-center w-2/3 inline-block 
+        bg-gradient-to-r from-white to-gray-500
+      bg-clip-text text-transparent"
+      >
+        Join The Waitlist For Funded Accounts Today!
+      </p>
+      <p className="m-2 mb-10">
+        {" "}
+        learn, trade, and earn using our funded accounts{" "}
+      </p>
+    </div>
+  );
+}
+
+export default Landing;

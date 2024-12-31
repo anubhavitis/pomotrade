@@ -1,20 +1,17 @@
 "use client";
-import { useEffect, useState } from "react";
-import { LoopsClient } from "loops";
-import Image from "next/image";
+import { useEffect } from "react";
+import Navbar from "@/components/navbar";
+import Waitlist from "@/components/waitlist";
+import Landing from "@/components/landing";
 
 export default function Home() {
-  const [email, setEmail] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    const loops = new LoopsClient("YOUR_LOOPS_API_KEY");
-  }, []);
+  useEffect(() => {}, []);
 
   return (
-    <div>
-      <p className="text-2xl font-bold text-red-500">hello world</p>
+    <div className="w-full h-screen p-4 bg-sky-950 text-white">
+      <Navbar />
+      <Landing />
+      <Waitlist />
     </div>
   );
 }
