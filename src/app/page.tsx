@@ -14,7 +14,7 @@ export default function Home() {
 
   return (
     <div>
-      <h1> hello world</h1>
+      <p className="text-2xl font-bold text-red-500">hello world</p>
     </div>
   );
 }
