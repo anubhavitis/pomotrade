@@ -16,6 +16,7 @@ export async function POST(request: Request) {
     const response = await loops.createContact(email);
     console.log("Loops response:", response);
 
+    // @ts-ignore
     if (response.message) {
       return NextResponse.json(
         { error: "Failed to add contact" },
