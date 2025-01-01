@@ -1,15 +1,34 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 
 const Waitlist = () => {
   const [inputValue, setInputValue] = useState("");
   const [button, setButton] = useState("Join Waitlist");
   const [inputDisabled, setInputDisabled] = useState(false);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    setButton("Joined ✔︎");
-    setInputDisabled(true);
+    try {
+      const response = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: inputValue }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to join waitlist");
+      }
+
+      setButton("Joined ✔︎");
+      setInputDisabled(true);
+    } catch (error) {
+      console.error("Error:", error);
+      setButton("Failed");
+    }
   };
 
   return (
