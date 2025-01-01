@@ -12,10 +12,9 @@ html, body {
   --color2: 221, 74, 255;
   --color3: 100, 220, 255;
   --color4: 200, 50, 50;
-  --color5: 180, 180, 50;
   --color-interactive: 140, 100, 255;
   --circle-size: 90%;
-  --blending: multiply;
+  --blending: hard-light;
 }
 
 @keyframes moveInCircle {
@@ -141,22 +140,6 @@ html, body {
     animation: moveHorizontal 40s ease infinite;
 
     opacity: 0.7;
-  }
-
-  .g5 {
-    position: absolute;
-    background: radial-gradient(circle at center, rgba(var(--color5), 0.8) 0, rgba(var(--color5), 0) 50%) no-repeat;
-    mix-blend-mode: var(--blending);
-
-    width: calc(var(--circle-size) * 2);
-    height: calc(var(--circle-size) * 2);
-    top: calc(50% - var(--circle-size));
-    left: calc(50% - var(--circle-size));
-
-    transform-origin: calc(50% - 800px) calc(50% + 200px);
-    animation: moveInCircle 20s ease infinite;
-
-    opacity: 1;
   }
 
   .interactive {
