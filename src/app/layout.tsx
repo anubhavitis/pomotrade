@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import "./style.scss";
 
 const geistSans = Inter({
   variable: "--font-geist-sans",
@@ -8,7 +9,7 @@ const geistSans = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "ExDawg",
+  title: "EzDawg",
   description: "Jump start your trading career with funded accounts",
 };
 
