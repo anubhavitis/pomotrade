@@ -43,8 +43,8 @@ export default function Home() {
     <div className="bg-transparent w-screen h-screen overflow-y-hidden p-4 text-white">
       <Navbar />
       <div className="absolute inset-0 z-10 w-screen h-screen flex flex-col gap-6 items-center justify-center">
-      <Landing />
-      <Waitlist />
+        <Landing />
+        <Waitlist />
       </div>
       <BackgroundBeams />
     </div>
