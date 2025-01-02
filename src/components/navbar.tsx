@@ -1,18 +1,19 @@
+import Image from "next/image";
 import Link from "next/link";
 import { AiOutlineX } from "react-icons/ai";
 
 const Navbar = () => {
   return (
-    <nav className="mx-auto py-2 w-full lg:w-4/5 flex justify-between items-center ">
+    <nav className="p-8 absolute z-10 inset-0 w-screen h-fit backdrop-blur-sm flex justify-between items-center ">
       <div>
-        <Link href="/" className="flex items-center space-x-2">
-          <img src="/logo.png" alt="EzDawg" className="w-20 h-20" />
-          <h1 className="text-sm md:text-xl font-bold ">EzDawg</h1>
+        <Link href="/" className="flex items-center gap-4 justify-center">
+          <Image src="/EzDawg.svg" alt="EzDawg" width={24} height={24} />
+          <h1 className="text-sm md:text-2xl leading-none font-bold ">EzDawg</h1>
         </Link>
       </div>
       <div>
         <Link href="https://x.com/ezdawg_inc" target="_blank">
-          <AiOutlineX size={24} />
+          <AiOutlineX size={20} />
         </Link>
       </div>
     </nav>
