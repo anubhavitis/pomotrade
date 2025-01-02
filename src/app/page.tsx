@@ -4,7 +4,6 @@ import Navbar from "@/components/navbar";
 import Waitlist from "@/components/waitlist";
 import Landing from "@/components/landing";
 import { BackgroundBeams } from "@/components/ui/background-beams";
-import { div } from "framer-motion/client";
 
 export default function Home() {
   useEffect(() => {

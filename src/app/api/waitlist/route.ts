@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     // Create contact
     const response = await loops.createContact(email);
 
-    // @ts-ignore
+    // @ts-expect-error response as message, just not exported by loops
     if (response.message) {
       resp.message = "Failed to add contact";
       resp.success = false;
