@@ -2,11 +2,14 @@ import { FormEvent, useState } from "react";
 
 const Waitlist = () => {
   const [inputValue, setInputValue] = useState("");
-  const [button, setButton] = useState("Join Waitlist");
+  const [buttonStr, setButton] = useState("Join Waitlist");
   const [inputDisabled, setInputDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true);
+    setButton("Joining...");
 
     try {
       const response = await fetch("/api/waitlist", {
@@ -17,17 +20,23 @@ const Waitlist = () => {
         body: JSON.stringify({ email: inputValue }),
       });
 
-      const data = await response.json();
+      const data: { message: string; success: boolean } = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to join waitlist");
+        throw new Error(data.message || "Failed to join waitlist");
       }
 
-      setButton("Joined ✔︎");
-      setInputDisabled(true);
+      if (data.success) {
+        setButton("Joined 🎉");
+        setInputDisabled(true);
+      } else {
+        throw new Error(data.message || "Failed to join waitlist");
+      }
     } catch (error) {
       console.error("Error:", error);
       setButton("Failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,10 +56,12 @@ const Waitlist = () => {
         />
         <button
           type="submit"
-          className="px-4 py-2 m-2 w-full sm:w-auto text-sm sm:text-base bg-blue-100 bg-opacity-20 text-white font-bold rounded-xl hover:bg-opacity-40 hover:shadow-lg transition-all duration-200 ease-in-out"
-          disabled={inputDisabled}
+          className={`px-4 py-2 m-2 w-full sm:w-auto text-sm sm:text-base bg-blue-100 bg-opacity-20 text-white font-bold rounded-xl hover:bg-opacity-40 transition-all duration-200 ease-in-out ${
+            loading ? "animate-breathing" : "hover:shadow-lg"
+          }`}
+          disabled={inputDisabled || loading}
         >
-          {button}
+          {buttonStr}
         </button>
       </form>
     </div>

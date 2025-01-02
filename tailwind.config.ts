@@ -13,6 +13,19 @@ export default {
         foreground: "var(--foreground)",
       },
     },
+    keyframes: {
+      breathing: {
+        "0%, 100%": {
+          boxShadow: "0 0 0 0 rgba(255, 255, 255, 0.4)",
+        },
+        "50%": {
+          boxShadow: "0 0 20px 0 rgba(255, 255, 255, 0.7)",
+        },
+      },
+    },
+    animation: {
+      breathing: "breathing 2s ease-in-out infinite",
+    },
   },
   plugins: [],
 } satisfies Config;
