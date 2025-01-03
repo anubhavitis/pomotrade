@@ -21,10 +21,10 @@ export default function Home() {
 
   return (
     <div className="bg-transparent w-screen h-screen overflow-y-hidden p-4 text-white relative">
-      <div
+      {/* <div
         id="cursor-light"
         className="pointer-events-none fixed w-[300px] h-[300px] bg-white/10 rounded-full blur-2xl"
-      />
+      /> */}
       <Navbar />
       <div className="absolute inset-0 z-10 w-screen h-screen flex flex-col gap-6 items-center justify-center">
         <Landing />
