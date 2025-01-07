@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-import { LoopsClient } from "loops";
-
-// Initialize Loops with your API key
-const loops = new LoopsClient(process.env.LOOPS_API_KEY!);
+import dbConnect from "@/lib/dbConnect";
+import Waitlist from "@/models/waitlist";
+import { sendWaitlistEmail } from "@/lib/mailer";
 
 interface WaitlistResponse {
   message: string;
@@ -15,25 +14,26 @@ export async function POST(request: Request) {
     success: false,
   };
   try {
+    await dbConnect();
     const { email } = await request.json();
 
-    const findContact = await loops.findContact({ email });
-
-    if (findContact.length > 0 && findContact[0].email === email) {
-      resp.message = "User Exists";
-      resp.success = true;
-      return NextResponse.json(resp, { status: 200 });
-    }
-    // Create contact
-    const response = await loops.createContact(email);
-
-    // @ts-expect-error response as message, just not exported by loops
-    if (response.message) {
-      resp.message = "Failed to add contact";
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      resp.message = "Invalid email format";
       resp.success = false;
       return NextResponse.json(resp, { status: 400 });
     }
 
+    // Check if email already exists
+    const existing = await Waitlist.findOne({ email });
+    if (existing) {
+      resp.message = "You are already on the waitlist";
+      resp.success = true;
+      return NextResponse.json(resp, { status: 200 });
+    }
+
+    await sendWaitlistEmail(email);
+    await Waitlist.create({ email });
     resp.message = "You are now on the waitlist";
     resp.success = true;
     return NextResponse.json(resp, { status: 200 });
