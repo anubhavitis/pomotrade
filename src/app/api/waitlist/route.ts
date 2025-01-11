@@ -1,11 +1,58 @@
 import { NextResponse } from "next/server";
-import dbConnect from "@/lib/dbConnect";
-import Waitlist from "@/models/waitlist";
-import { sendWaitlistEmail } from "@/lib/mailer";
 
 interface WaitlistResponse {
   message: string;
   success: boolean;
+}
+
+async function checkEmailExists(email: string): Promise<boolean> {
+  const url = `https://api.brevo.com/v3/contacts/${email}`;
+  const response = await fetch(url, {
+    headers: {
+      "api-key": process.env.BREVO_API_KEY!,
+    },
+  });
+
+  const resp = await response.json();
+
+  if (response.status === 200 && resp.email === email) {
+    return true;
+  }
+
+  return false;
+}
+
+async function createContact(email: string): Promise<boolean> {
+  const url = `https://api.brevo.com/v3/contacts`;
+  const body = {
+    email: email,
+    ext_id: "",
+    attributes: {},
+    emailBlacklisted: false,
+    smsBlacklisted: false,
+    listIds: [],
+    updateEnabled: false,
+    smtpBlacklistSender: [],
+  };
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json",
+      "api-key": process.env.BREVO_API_KEY!,
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (response.ok == true && response.statusText == "Created") {
+    return true;
+  }
+  return false;
+}
+
+function checkEmailFormat(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
 }
 
 export async function POST(request: Request) {
@@ -13,33 +60,31 @@ export async function POST(request: Request) {
     message: "",
     success: false,
   };
-  try {
-    await dbConnect();
-    const { email } = await request.json();
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      resp.message = "Invalid email format";
-      resp.success = false;
-      return NextResponse.json(resp, { status: 400 });
-    }
+  const email = (await request.json()).email as string;
 
-    // Check if email already exists
-    const existing = await Waitlist.findOne({ email });
-    if (existing) {
-      resp.message = "You are already on the waitlist";
-      resp.success = true;
-      return NextResponse.json(resp, { status: 200 });
-    }
+  if (!checkEmailFormat(email)) {
+    console.log("wrong email format");
+    resp.message = "Invalid email format";
+    resp.success = false;
+    return NextResponse.json(resp, { status: 400 });
+  }
 
-    await sendWaitlistEmail(email);
-    await Waitlist.create({ email });
+  if (await checkEmailExists(email)) {
+    console.log("email already exists");
+    resp.message = "You are already on the waitlist";
+    resp.success = true;
+    return NextResponse.json(resp, { status: 200 });
+  }
+
+  if (await createContact(email)) {
+    console.log("email created");
     resp.message = "You are now on the waitlist";
     resp.success = true;
     return NextResponse.json(resp, { status: 200 });
-  } catch (error) {
-    console.error("Server error:", error);
+  } else {
     resp.message = "Internal server error";
+    resp.success = false;
     return NextResponse.json(resp, { status: 500 });
   }
 }
