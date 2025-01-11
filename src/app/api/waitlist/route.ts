@@ -26,13 +26,8 @@ async function createContact(email: string): Promise<boolean> {
   const url = `https://api.brevo.com/v3/contacts`;
   const body = {
     email: email,
-    ext_id: "",
     attributes: {},
-    emailBlacklisted: false,
-    smsBlacklisted: false,
-    listIds: [],
-    updateEnabled: false,
-    smtpBlacklistSender: [],
+    listIds: [6],
   };
   const response = await fetch(url, {
     method: "POST",
