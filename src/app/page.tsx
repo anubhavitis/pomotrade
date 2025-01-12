@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import Navbar from "@/components/navbar";
 import Waitlist from "@/components/waitlist";
 import Landing from "@/components/landing";
-import { BackgroundBeams } from "@/components/ui/background-beams";
+import { FlickeringGrid } from "@/components/ui/flickering-grid";
 
 export default function Home() {
   useEffect(() => {
@@ -21,16 +21,19 @@ export default function Home() {
 
   return (
     <div className="bg-transparent w-screen h-screen overflow-y-hidden p-4 text-white relative">
-      {/* <div
-        id="cursor-light"
-        className="pointer-events-none fixed w-[300px] h-[300px] bg-white/10 rounded-full blur-2xl"
-      /> */}
+      <FlickeringGrid
+        className="absolute inset-0"
+        squareSize={4}
+        gridGap={6}
+        color="#ffffff"
+        maxOpacity={0.1}
+        flickerChance={0.1}
+      />
       <Navbar />
       <div className="absolute inset-0 z-10 w-screen h-screen flex flex-col gap-6 items-center justify-center">
         <Landing />
         <Waitlist />
       </div>
-      <BackgroundBeams />
     </div>
   );
 }

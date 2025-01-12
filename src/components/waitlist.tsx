@@ -48,26 +48,18 @@ const Waitlist = () => {
         onSubmit={handleSubmit}
         className="flex flex-col sm:flex-row justify-center items-center w-full gap-4"
       >
-        {/* <input
-          type="email"
-          value={inputValue}
-          onChange={(event) => setInputValue(event.target.value)}
-          placeholder="Enter your email"
-          disabled={inputDisabled}
-          className="px-4 py-2 m-2 w-full sm:w-2/3 md:w-3/5 lg:w-1/2 text-sm sm:text-base text-white placeholder-white shadow-lg rounded-lg bg-blue-100 bg-opacity-5 focus:outline-none focus:bg-opacity-10 focus:font-semibold focus:placeholder-transparent"
-        /> */}
         <Input
           type="email"
           value={inputValue}
           onChange={(event) => setInputValue(event.target.value)}
           placeholder="Enter your email"
           disabled={inputDisabled}
-          className="w-5/6 md:w-96 rounded-md border-0 bg-white/5 backdrop-blur-sm h-10 text-white placeholder:text-white/50"
+          className="w-5/6 md:w-96 rounded-md border-x border-white/5 bg-white/5 hover:backdrop-blur-md backdrop-blur-sm h-10 text-white placeholder:text-white/50"
         />
         <button
           type="submit"
           className={clsx(
-            `w-5/6 md:w-36 px-2 rounded-md border-0 bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm h-10 text-white placeholder:text-white/50`,
+            `w-5/6 md:w-36 px-2 rounded-md border-x border-white/5 bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm h-10 text-white placeholder:text-white/50`,
             loading ? "animate-breathing" : "hover:shadow-lg"
           )}
           disabled={inputDisabled || loading}
