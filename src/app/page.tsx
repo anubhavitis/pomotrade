@@ -29,8 +29,8 @@ export default function Home() {
         maxOpacity={0.1}
         flickerChance={0.1}
       />
-      <Navbar />
       <div className="absolute inset-0 z-10 w-screen h-screen flex flex-col gap-6 items-center justify-center">
+        <Navbar />
         <Landing />
         <Waitlist />
       </div>
