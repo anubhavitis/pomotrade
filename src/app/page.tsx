@@ -23,9 +23,10 @@ export default function Home() {
     <div className="bg-transparent w-screen h-screen overflow-y-hidden p-4 text-white relative">
       <FlickeringGrid
         className="absolute inset-0"
-        squareSize={4}
-        gridGap={6}
-        color="#ffffff"
+        squareSize={7}
+        gridGap={2}
+        color1="#00de5c"
+        color2="#f34723"
         maxOpacity={0.1}
         flickerChance={0.1}
       />
