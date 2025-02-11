@@ -23,8 +23,8 @@ export default function Home() {
     <div className="bg-transparent w-screen h-screen overflow-y-hidden p-4 text-white relative">
       <FlickeringGrid
         className="absolute inset-0"
-        squareSize={7}
-        gridGap={2}
+        squareSize={5}
+        gridGap={5}
         color1="#00de5c"
         color2="#f34723"
         maxOpacity={0.1}
