@@ -54,12 +54,12 @@ const Waitlist = () => {
           onChange={(event) => setInputValue(event.target.value)}
           placeholder="Enter your email"
           disabled={inputDisabled}
-          className="w-5/6 md:w-96 rounded-md border-x border-white/5 bg-white/5 hover:backdrop-blur-md backdrop-blur-sm h-10 text-white placeholder:text-white/50"
+          className="w-5/6 md:w-96 rounded-md border-x border-white/5 focus:border-white bg-white/5 hover:backdrop-blur-md backdrop-blur-sm h-10 text-white placeholder:text-white/50"
         />
         <button
           type="submit"
           className={clsx(
-            `w-5/6 md:w-36 px-2 rounded-md border-x border-white/5 bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm h-10 text-white placeholder:text-white/50`,
+            `w-5/6 md:w-36 px-2 rounded-md border-x border-white/5 bg-white/5 hover:bg-white hover:text-black transition-colors backdrop-blur-sm h-10 text-white placeholder:text-white/50`,
             loading ? "animate-breathing" : "hover:shadow-lg"
           )}
           disabled={inputDisabled || loading}
