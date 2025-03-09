@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-interface WaitlistResponse {
+interface SignUpResponse {
   message: string;
   success: boolean;
 }
@@ -16,7 +16,7 @@ export async function Signup(formData: FormData) {
 
 
 
-  const resp: WaitlistResponse = {
+  const resp: SignUpResponse = {
     message: "",
     success: false,
   };
