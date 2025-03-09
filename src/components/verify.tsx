@@ -26,11 +26,8 @@ const Verify = () => {
 
     const formData = new FormData(event.currentTarget);
     const email = formData.get("email") as string;
-    // const password = formData.get("password") as string;
 
     try {
-      // Here you would integrate with your auth provider
-      // For example: await supabase.auth.signInWithPassword({ email, password })
 
       const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/login`;
       const response = await fetch(url, {
@@ -92,15 +89,6 @@ const Verify = () => {
               disabled={isLoading}
               className="w-full rounded-md border-x border-white/5 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
             />
-            {/* <Input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Enter your password"
-              required
-              disabled={isLoading}
-              className="w-full rounded-md border-x border-white/5 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
-            /> */}
             <Button
               type="submit"
               className={clsx(
@@ -114,15 +102,7 @@ const Verify = () => {
           </form>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          {/* <Button
-            type="button"
-            variant="ghost"
-            className="w-full text-white"
-            onClick={() => onNavigate("signup")}
-            disabled={isLoading}
-          >
-            Need an account? Sign up
-          </Button> */}
+
         </CardFooter>
       </Card>
     </div>
