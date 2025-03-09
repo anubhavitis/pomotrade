@@ -37,21 +37,10 @@ export default function SignUp({
     const formData = new FormData(event.currentTarget);
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
-    // const confirmPassword = formData.get("confirmPassword") as string;
 
-    // if (password !== confirmPassword) {
-    //   toast({
-    //     variant: "destructive",
-    //     title: "Error",
-    //     description: "Passwords do not match. Please try again.",
-    //   });
-    //   setIsLoading(false);
-    //   return;
-    // }
 
     try {
-      // Here you would integrate with your auth provider
-      // For example: await supabase.auth.signUp({ email, password })
+
       const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/account/sign-up`;
       const response = await fetch(url, {
         method: "POST",
@@ -112,7 +101,7 @@ export default function SignUp({
               id="name"
               name="name"
               type="name"
-              placeholder="satoshi"
+              placeholder="John Doe"
               required
               disabled={isLoading}
               className="w-full rounded-md border-x border-white/5 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
@@ -121,30 +110,12 @@ export default function SignUp({
               id="email"
               name="email"
               type="email"
-              placeholder="name@example.com"
+              placeholder="john.doe@example.com"
               required
               disabled={isLoading}
               className="w-full rounded-md border-x border-white/5 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
             />
 
-            {/* <Input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Enter your password"
-              required
-              disabled={isLoading}
-              className="w-full rounded-md border-x border-white/5 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
-            />
-            <Input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              placeholder="Confirm your password"
-              required
-              disabled={isLoading}
-              className="w-full rounded-md border-x border-white/5 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
-            /> */}
             <Button
               type="submit"
               className={clsx(
