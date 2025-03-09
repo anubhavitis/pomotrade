@@ -30,13 +30,11 @@ export async function Signup(formData: FormData) {
     headers: {
       accept: "application/json",
       "content-type": "application/json",
-      //   "api-key": process.env.BREVO_API_KEY!,
     },
 
     body: JSON.stringify(body),
   });
 
-  //   const email = (await request.json()).email as string;
 
   if (!checkEmailFormat(email)) {
     console.log("wrong email format");
