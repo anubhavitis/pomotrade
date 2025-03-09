@@ -28,7 +28,8 @@ export default function RootLayout({
           className="absolute inset-0"
           squareSize={4}
           gridGap={6}
-          color="#ffffff"
+          color1="#ffffff"
+          color2="#ffffff"
           maxOpacity={0.1}
           flickerChance={0.1}
         />
