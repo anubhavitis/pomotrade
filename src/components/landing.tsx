@@ -8,7 +8,7 @@ function Landing() {
           We Fund, You Trade
         </p>
         <p className="w-5/6 lg:w-full text-xs sm:text-sm md:text-base text-stone-500">
-          EzDawg provides you a platform to learn, prove your skills, and get a
+          PomoTrade provides you a platform to learn, prove your skills, and get a
           funded account with over $20k to trade with. <br />
           Join our waitlist to get access to get early access to the platform.
         </p>

@@ -10,7 +10,7 @@ const geistSans = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "EzDawg",
+  title: "PomoTrade",
   description: "Jump start your trading career with funded accounts",
 };
 
