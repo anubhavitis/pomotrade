@@ -17,7 +17,6 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
-import { log } from "console";
 
 export default function SignUp({
   onNavigate,
@@ -32,8 +31,6 @@ export default function SignUp({
     event.preventDefault();
     setIsLoading(true);
 
-    console.log("Submitted");
-
     const formData = new FormData(event.currentTarget);
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
@@ -41,16 +38,13 @@ export default function SignUp({
 
     try {
 
-      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/account/sign-up`;
-      const response = await fetch(url, {
+      const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ name, email }),
-      }
-      );
-      console.log("RES: ", response);
+      });
 
       const data = await response.json();
       console.log("DATA: ", data);
@@ -71,6 +65,7 @@ export default function SignUp({
         });
       }
     } catch (error) {
+      console.log("ERROR: ", error);
       toast({
         variant: "destructive",
         title: "Error",

@@ -31,23 +31,19 @@ export default function SignIn({
 
     const formData = new FormData(event.currentTarget);
     const email = formData.get("email") as string;
-    // const password = formData.get("password") as string;
 
     try {
-      // Here you would integrate with your auth provider
-      // For example: await supabase.auth.signInWithPassword({ email, password })
 
-      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/login`;
-      const response = await fetch(url, {
+      const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: email }),
-      }
-      );
+        body: JSON.stringify({ name, email }),
+      });
 
       const data: { message: string; success: boolean } = await response.json();
+
 
       if (!response.ok) {
         throw new Error(data.message || "Failed to join waitlist");
@@ -62,6 +58,7 @@ export default function SignIn({
         throw new Error(data.message || "Failed to join waitlist");
       }
     } catch (error) {
+      console.log("ERROR: ", error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -97,15 +94,6 @@ export default function SignIn({
               disabled={isLoading}
               className="w-full rounded-md border-x border-white/5 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
             />
-            {/* <Input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Enter your password"
-              required
-              disabled={isLoading}
-              className="w-full rounded-md border-x border-white/5 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
-            /> */}
             <Button
               type="submit"
               className={clsx(

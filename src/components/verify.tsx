@@ -54,6 +54,7 @@ const Verify = () => {
         throw new Error(data.message || "Failed to join waitlist");
       }
     } catch (error) {
+      console.log("ERROR: ", error);
       toast({
         variant: "destructive",
         title: "Error",

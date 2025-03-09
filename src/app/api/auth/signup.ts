@@ -10,20 +10,28 @@ function checkEmailFormat(email: string): boolean {
   return emailRegex.test(email);
 }
 
-export async function Signup(formData: FormData) {
-  const name = formData.get("name") as string;
-  const email = formData.get("email") as string;
-
-
+export async function POST(request: Request) {
+  const formData = await request.json();
+  const name = formData.name as string;
+  const email = formData.email as string;
 
   const resp: SignUpResponse = {
     message: "",
     success: false,
   };
 
-  const url = `https://api.brevo.com/v3/contacts`;
+  if (!checkEmailFormat(email)) {
+    console.log("wrong email format");
+    resp.message = "Invalid email format";
+    resp.success = false;
+    return NextResponse.json(resp, { status: 400 });
+  }
+
+
+  const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/account/sign-up`;
   const body = {
     email: email,
+    name: name,
   };
   const response = await fetch(url, {
     method: "POST",
@@ -35,11 +43,10 @@ export async function Signup(formData: FormData) {
     body: JSON.stringify(body),
   });
 
+  const data = await response.json();
 
-  if (!checkEmailFormat(email)) {
-    console.log("wrong email format");
-    resp.message = "Invalid email format";
-    resp.success = false;
-    return NextResponse.json(resp, { status: 400 });
-  }
+  resp.success = data.success;
+  resp.message = data.message;
+
+  return NextResponse.json(resp, { status: 200 });
 }

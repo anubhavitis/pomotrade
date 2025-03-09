@@ -1,5 +1,4 @@
 "use client";
-import { useEffect } from "react";
 import Waitlist from "@/components/waitlist";
 import Landing from "@/components/landing";
 
