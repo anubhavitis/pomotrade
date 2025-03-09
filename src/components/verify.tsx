@@ -1,9 +1,7 @@
 "use client";
 
 import type React from "react";
-
 import { useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -15,54 +13,45 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
 import clsx from "clsx";
 
-export default function SignUp({
-  onNavigate,
-}: {
-  onNavigate: (view: string) => void;
-}) {
+const Verify = () => {
   const [isLoading, setIsLoading] = useState(false);
+
   const { toast } = useToast();
-  const router = useRouter();
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsLoading(true);
 
     const formData = new FormData(event.currentTarget);
-    const name = formData.get("name") as string;
     const email = formData.get("email") as string;
-
 
     try {
 
-      const response = await fetch("/api/auth/signup", {
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/login`;
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, email }),
-      });
+        body: JSON.stringify({ email: email }),
+      }
+      );
 
-      const data = await response.json();
-      console.log("DATA: ", data);
+      const data: { message: string; success: boolean } = await response.json();
 
-      if (response.ok) {
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to join waitlist");
+      }
+
+      if (data.success) {
         toast({
-          title: "Check your email",
-          description:
-            "We sent you a signup link. Be sure to check your spam folder.",
+          title: "Success",
+          description: "You have successfully signed in.",
         });
-        router.push("/verify");
       } else {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description:
-            data.message || "Something went wrong. Please try again.",
-        });
+        throw new Error(data.message || "Failed to join waitlist");
       }
     } catch (error) {
       console.log("ERROR: ", error);
@@ -81,10 +70,10 @@ export default function SignUp({
       <Card className="w-full max-w-md backdrop-blur-sm border-white/5 bg-white/5">
         <CardHeader>
           <CardTitle className="text-2xl text-center text-white">
-            Create an account
+            Verify
           </CardTitle>
           <CardDescription className="text-center text-white">
-            Enter your email to create a new account
+            Enter the pin to Verify your email.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -93,24 +82,14 @@ export default function SignUp({
             className="flex flex-col justify-center items-center w-full gap-4"
           >
             <Input
-              id="name"
-              name="name"
-              type="name"
-              placeholder="John Doe"
+              id="otp"
+              name="otp"
+              type="otp"
+              placeholder="PixN01"
               required
               disabled={isLoading}
               className="w-full rounded-md border-x border-white/5 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
             />
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="john.doe@example.com"
-              required
-              disabled={isLoading}
-              className="w-full rounded-md border-x border-white/5 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
-            />
-
             <Button
               type="submit"
               className={clsx(
@@ -119,22 +98,16 @@ export default function SignUp({
               )}
               disabled={isLoading}
             >
-              {isLoading ? "Loading..." : "Sign up"}
+              {isLoading ? "Loading..." : "Verify"}
             </Button>
           </form>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <Button
-            type="button"
-            variant="ghost"
-            className="w-full text-white"
-            onClick={() => onNavigate("signin")}
-            disabled={isLoading}
-          >
-            Already have an account? Sign in
-          </Button>
+
         </CardFooter>
       </Card>
     </div>
   );
-}
+};
+
+export default Verify;

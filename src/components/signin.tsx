@@ -22,6 +22,7 @@ export default function SignIn({
   onNavigate: (view: string) => void;
 }) {
   const [isLoading, setIsLoading] = useState(false);
+
   const { toast } = useToast();
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -30,16 +31,34 @@ export default function SignIn({
 
     const formData = new FormData(event.currentTarget);
     const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
 
     try {
-      // Here you would integrate with your auth provider
-      // For example: await supabase.auth.signInWithPassword({ email, password })
-      toast({
-        title: "Success",
-        description: "You have successfully signed in.",
+
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email }),
       });
+
+      const data: { message: string; success: boolean } = await response.json();
+
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to join waitlist");
+      }
+
+      if (data.success) {
+        toast({
+          title: "Success",
+          description: "You have successfully signed in.",
+        });
+      } else {
+        throw new Error(data.message || "Failed to join waitlist");
+      }
     } catch (error) {
+      console.log("ERROR: ", error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -71,15 +90,6 @@ export default function SignIn({
               name="email"
               type="email"
               placeholder="name@example.com"
-              required
-              disabled={isLoading}
-              className="w-full rounded-md border-x border-white/5 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
-            />
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Enter your password"
               required
               disabled={isLoading}
               className="w-full rounded-md border-x border-white/5 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
