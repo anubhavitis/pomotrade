@@ -59,7 +59,7 @@ const Waitlist = () => {
         <button
           type="submit"
           className={clsx(
-            `w-5/6 md:w-36 px-2 rounded-md border-x border-white/5 bg-white/5 hover:bg-white hover:text-black transition-colors backdrop-blur-sm h-10 text-white placeholder:text-white/50`,
+            `w-5/6 md:w-36 px-2 rounded-md border-x border-white/5 bg-white/5 hover:bg-green-700 hover:text-black transition-colors backdrop-blur-sm h-10 text-white placeholder:text-white/50`,
             loading ? "animate-breathing" : "hover:shadow-lg"
           )}
           disabled={inputDisabled || loading}

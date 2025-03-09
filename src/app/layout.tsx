@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 import { FlickeringGrid } from "@/components/ui/flickering-grid";
 
 const geistSans = Inter({
@@ -22,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} antialiased bg-transparent w-screen h-screen overflow-y-hidden p-4 text-white relative`}
+        className={`${geistSans.variable} antialiased bg-transparent w-screen h-screen flex flex-col text-white relative`}
       >
         <FlickeringGrid
           className="absolute inset-0"
@@ -34,7 +35,10 @@ export default function RootLayout({
           flickerChance={0.1}
         />
         <Navbar />
-        {children}
+        <main className="flex-grow overflow-y-auto">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );
