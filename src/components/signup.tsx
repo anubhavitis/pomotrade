@@ -52,16 +52,14 @@ export default function SignUp({
     try {
       // Here you would integrate with your auth provider
       // For example: await supabase.auth.signUp({ email, password })
-
-      const response = await fetch(
-        "https://pomotrade-be-production.up.railway.app/api/v1/account/sign-up",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name, email }),
-        }
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/account/sign-up`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email }),
+      }
       );
       console.log("RES: ", response);
 

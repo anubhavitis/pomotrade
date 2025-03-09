@@ -37,15 +37,14 @@ export default function SignIn({
       // Here you would integrate with your auth provider
       // For example: await supabase.auth.signInWithPassword({ email, password })
 
-      const response = await fetch(
-        "https://pomotrade-be-production.up.railway.app/api/v1/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email: email }),
-        }
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/login`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: email }),
+      }
       );
 
       const data: { message: string; success: boolean } = await response.json();
