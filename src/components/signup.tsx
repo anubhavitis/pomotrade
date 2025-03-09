@@ -3,6 +3,7 @@
 import type React from "react";
 
 import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -14,7 +15,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 import clsx from "clsx";
+import { log } from "console";
 
 export default function SignUp({
   onNavigate,
@@ -23,34 +26,63 @@ export default function SignUp({
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsLoading(true);
 
-    const formData = new FormData(event.currentTarget);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const confirmPassword = formData.get("confirmPassword") as string;
+    console.log("Submitted");
 
-    if (password !== confirmPassword) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Passwords do not match. Please try again.",
-      });
-      setIsLoading(false);
-      return;
-    }
+    const formData = new FormData(event.currentTarget);
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    // const confirmPassword = formData.get("confirmPassword") as string;
+
+    // if (password !== confirmPassword) {
+    //   toast({
+    //     variant: "destructive",
+    //     title: "Error",
+    //     description: "Passwords do not match. Please try again.",
+    //   });
+    //   setIsLoading(false);
+    //   return;
+    // }
 
     try {
       // Here you would integrate with your auth provider
       // For example: await supabase.auth.signUp({ email, password })
-      toast({
-        title: "Check your email",
-        description:
-          "We sent you a signup link. Be sure to check your spam folder.",
-      });
+
+      const response = await fetch(
+        "https://pomotrade-be-production.up.railway.app/api/v1/account/sign-up",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, email }),
+        }
+      );
+      console.log("RES: ", response);
+
+      const data = await response.json();
+      console.log("DATA: ", data);
+
+      if (response.ok) {
+        toast({
+          title: "Check your email",
+          description:
+            "We sent you a signup link. Be sure to check your spam folder.",
+        });
+        router.push("/verify");
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description:
+            data.message || "Something went wrong. Please try again.",
+        });
+      }
     } catch (error) {
       toast({
         variant: "destructive",
@@ -70,7 +102,7 @@ export default function SignUp({
             Create an account
           </CardTitle>
           <CardDescription className="text-center text-white">
-            Enter your email and password to create a new account
+            Enter your email to create a new account
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -78,6 +110,15 @@ export default function SignUp({
             onSubmit={onSubmit}
             className="flex flex-col justify-center items-center w-full gap-4"
           >
+            <Input
+              id="name"
+              name="name"
+              type="name"
+              placeholder="satoshi"
+              required
+              disabled={isLoading}
+              className="w-full rounded-md border-x border-white/5 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
+            />
             <Input
               id="email"
               name="email"
@@ -87,7 +128,8 @@ export default function SignUp({
               disabled={isLoading}
               className="w-full rounded-md border-x border-white/5 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
             />
-            <Input
+
+            {/* <Input
               id="password"
               name="password"
               type="password"
@@ -104,7 +146,7 @@ export default function SignUp({
               required
               disabled={isLoading}
               className="w-full rounded-md border-x border-white/5 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
-            />
+            /> */}
             <Button
               type="submit"
               className={clsx(
