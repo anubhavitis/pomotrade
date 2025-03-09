@@ -23,7 +23,7 @@ async function checkEmailExists(email: string): Promise<boolean> {
 }
 
 async function createContact(email: string): Promise<boolean> {
-  const url = `https://api.brevo.com/v3/contacts`;
+  const url = `${process.env.BREVO_HOST}/contacts`;
   const body = {
     email: email,
     attributes: {},
