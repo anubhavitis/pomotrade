@@ -1,10 +1,10 @@
+import TradeWidget from "@/components/TradeWidget";
 import React from "react";
-import Verify from "@/components/verify";
 
 export default function page() {
   return (
     <div>
-      <Verify />
+      <TradeWidget />
     </div>
   );
 }

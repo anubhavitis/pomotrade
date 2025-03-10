@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 import clsx from "clsx";
 
 export default function SignIn({
@@ -22,8 +23,8 @@ export default function SignIn({
   onNavigate: (view: string) => void;
 }) {
   const [isLoading, setIsLoading] = useState(false);
-
   const { toast } = useToast();
+  const router = useRouter();
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -33,7 +34,6 @@ export default function SignIn({
     const email = formData.get("email") as string;
 
     try {
-
       const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
@@ -44,7 +44,6 @@ export default function SignIn({
 
       const data: { message: string; success: boolean } = await response.json();
 
-
       if (!response.ok) {
         throw new Error(data.message || "Failed to join waitlist");
       }
@@ -54,8 +53,15 @@ export default function SignIn({
           title: "Success",
           description: "You have successfully signed in.",
         });
+        router.push("/verify");
       } else {
-        throw new Error(data.message || "Failed to join waitlist");
+        // throw new Error(data.message || "Failed to join waitlist");
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description:
+            data.message || "Something went wrong. Please try again.",
+        });
       }
     } catch (error) {
       console.log("ERROR: ", error);

@@ -15,7 +15,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import clsx from "clsx";
 
-const Verify = () => {
+export default function Verify() {
   const [isLoading, setIsLoading] = useState(false);
 
   const { toast } = useToast();
@@ -28,7 +28,6 @@ const Verify = () => {
     const email = formData.get("email") as string;
 
     try {
-
       const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/login`;
       const response = await fetch(url, {
         method: "POST",
@@ -36,8 +35,7 @@ const Verify = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email: email }),
-      }
-      );
+      });
 
       const data: { message: string; success: boolean } = await response.json();
 
@@ -102,12 +100,8 @@ const Verify = () => {
             </Button>
           </form>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
-
-        </CardFooter>
+        <CardFooter className="flex flex-col space-y-4"></CardFooter>
       </Card>
     </div>
   );
-};
-
-export default Verify;
+}
