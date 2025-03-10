@@ -2,8 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -17,6 +16,8 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
+import Verify from "./verify";
+import { error } from "console";
 
 export default function SignUp({
   onNavigate,
@@ -24,6 +25,7 @@ export default function SignUp({
   onNavigate: (view: string) => void;
 }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState<string | null>(null);
   const { toast } = useToast();
   const router = useRouter();
 
@@ -33,21 +35,25 @@ export default function SignUp({
 
     const formData = new FormData(event.currentTarget);
     const name = formData.get("name") as string;
-    const email = formData.get("email") as string;
-
+    const emailInput = formData.get("email") as string;
 
     try {
-
+      console.log("email", emailInput, " and name", name);
       const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, email }),
+        body: JSON.stringify({ name, email: emailInput }),
       });
 
+      if (!response.ok) {
+        console.log("failed response", response);
+        throw new Error("signup failed");
+      }
+
       const data = await response.json();
-      console.log("DATA: ", data);
+      console.log("signup DATA: ", data);
 
       if (response.ok) {
         toast({
@@ -55,7 +61,7 @@ export default function SignUp({
           description:
             "We sent you a signup link. Be sure to check your spam folder.",
         });
-        router.push("/verify");
+        setEmail(emailInput);
       } else {
         toast({
           variant: "destructive",
@@ -74,6 +80,10 @@ export default function SignUp({
     } finally {
       setIsLoading(false);
     }
+  }
+
+  if (email) {
+    return <Verify email={email} onNavigate={onNavigate}/>;
   }
 
   return (

@@ -2,6 +2,7 @@
 
 import type React from "react";
 import { useState } from "react";
+import { FaArrowLeftLong } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -15,9 +16,14 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import clsx from "clsx";
 
-const Verify = () => {
+const Verify = ({
+  email,
+  onNavigate,
+}: {
+  email: string;
+  onNavigate: (view: string) => void;
+}) => {
   const [isLoading, setIsLoading] = useState(false);
-
   const { toast } = useToast();
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -25,24 +31,35 @@ const Verify = () => {
     setIsLoading(true);
 
     const formData = new FormData(event.currentTarget);
-    const email = formData.get("email") as string;
+    const pin = formData.get("pin") as string;
+
+    // Check if we have the email
+    if (!email) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Email not found. Please try again.",
+      });
+      setIsLoading(false);
+      return;
+    }
 
     try {
-
-      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/login`;
+      const url = `/api/auth/signup/verify`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: email }),
-      }
-      );
+        body: JSON.stringify({ email, pin }),
+      });
+      console.log("response", response);
 
       const data: { message: string; success: boolean } = await response.json();
+      console.log(" verify DATA: ", data);
 
       if (!response.ok) {
-        throw new Error(data.message || "Failed to join waitlist");
+        throw new Error(data.message || "Failed to Signup");
       }
 
       if (data.success) {
@@ -51,7 +68,7 @@ const Verify = () => {
           description: "You have successfully signed in.",
         });
       } else {
-        throw new Error(data.message || "Failed to join waitlist");
+        throw new Error(data.message || "Failed to Signup");
       }
     } catch (error) {
       console.log("ERROR: ", error);
@@ -69,11 +86,18 @@ const Verify = () => {
     <div className="min-h-screen flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md backdrop-blur-sm border-white/5 bg-white/5">
         <CardHeader>
+          <div
+            onClick={() => onNavigate("signup")}
+            className="absolute top-4 left-4 cursor-pointer"
+          >
+            <FaArrowLeftLong className="text-white" size={20} />
+          </div>
           <CardTitle className="text-2xl text-center text-white">
             Verify
           </CardTitle>
           <CardDescription className="text-center text-white">
-            Enter the pin to Verify your email.
+            <div>Enter the pin to Verify your email.</div>
+            <div>{email}</div>
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -82,9 +106,9 @@ const Verify = () => {
             className="flex flex-col justify-center items-center w-full gap-4"
           >
             <Input
-              id="otp"
-              name="otp"
-              type="otp"
+              id="pin"
+              name="pin"
+              type="pin"
               placeholder="PixN01"
               required
               disabled={isLoading}
@@ -102,9 +126,7 @@ const Verify = () => {
             </Button>
           </form>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
-
-        </CardFooter>
+        <CardFooter className="flex flex-col space-y-4"></CardFooter>
       </Card>
     </div>
   );
