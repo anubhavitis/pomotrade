@@ -3,6 +3,7 @@
 import type React from "react";
 import { useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,6 +27,7 @@ export default function LoginPin({
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -46,44 +48,31 @@ export default function LoginPin({
     }
 
     try {
-      //   const url = `/api/auth/signin/verify`;
-      //   const response = await fetch(url, {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify({ email, pin }),
-      //   });
-      const backendUrl = `${
-        process.env.NEXT_PUBLIC_BACKEND_URL
-      }/api/v1/auth/login/${encodeURIComponent(email)}/${encodeURIComponent(
-        pin
-      )}`;
-
-      const response = await fetch(backendUrl, {
-        method: "GET",
+      const url = `/api/auth/signin/verify`;
+      const response = await fetch(url, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
+        body: JSON.stringify({ email, pin }),
       });
 
       console.log("LoginPin response", response);
 
-      const data: { message: string; success: boolean } = await response.json();
-      console.log("DATA: ", data);
+      const data = await response.json();
+      console.log("Response data:", data);
 
       if (!response.ok) {
         throw new Error(data.message || "Failed to Login");
       }
 
-      if (data.success) {
-        toast({
-          title: "Success",
-          description: "You have successfully signed in.",
-        });
-      } else {
-        throw new Error(data.message || "Failed to login");
-      }
+      toast({
+        title: "Success",
+        description: "Successfully logged in!",
+      });
+
+      router.push("/home");
     } catch (error) {
       console.log("ERROR: ", error);
       toast({
