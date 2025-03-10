@@ -64,7 +64,7 @@ export async function POST(request: Request) {
           // If parsing fails, use text as message
           data = {
             success: false,
-            message: textData || "Unknown error occurred"
+            message: textData || "Unknown error occurred",
           };
         }
       }
@@ -88,9 +88,12 @@ export async function POST(request: Request) {
     }
   } catch (error) {
     console.error("Request processing error:", error);
-    return NextResponse.json({
-      success: false,
-      message: "Invalid request format"
-    }, { status: 400 });
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Invalid request format",
+      },
+      { status: 400 }
+    );
   }
 }

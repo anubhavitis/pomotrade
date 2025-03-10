@@ -46,15 +46,28 @@ export default function LoginPin({
     }
 
     try {
-      const url = `/api/auth/signin/verify`;
-      const response = await fetch(url, {
-        method: "POST",
+      //   const url = `/api/auth/signin/verify`;
+      //   const response = await fetch(url, {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify({ email, pin }),
+      //   });
+      const backendUrl = `${
+        process.env.NEXT_PUBLIC_BACKEND_URL
+      }/api/v1/auth/login/${encodeURIComponent(email)}/${encodeURIComponent(
+        pin
+      )}`;
+
+      const response = await fetch(backendUrl, {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, pin }),
       });
-      console.log("response", response);
+
+      console.log("LoginPin response", response);
 
       const data: { message: string; success: boolean } = await response.json();
       console.log("DATA: ", data);

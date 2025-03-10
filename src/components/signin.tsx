@@ -17,6 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 
 import clsx from "clsx";
+import LoginPin from "./LoginPin";
 
 export default function SignIn({
   onNavigate,
@@ -75,6 +76,10 @@ export default function SignIn({
     } finally {
       setIsLoading(false);
     }
+  }
+
+  if (email) {
+    return <LoginPin email={email} onNavigate={onNavigate} />;
   }
 
   return (

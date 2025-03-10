@@ -27,7 +27,7 @@ export default function SignUp({
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState<string | null>(null);
   const { toast } = useToast();
-  const router = useRouter();
+ 
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

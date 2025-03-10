@@ -31,7 +31,6 @@ export async function POST(request: Request) {
       email: email,
     };
 
-
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -41,7 +40,6 @@ export async function POST(request: Request) {
         },
         body: JSON.stringify(body),
       });
-
 
       // Handle different response types
       let data;
@@ -58,11 +56,10 @@ export async function POST(request: Request) {
           // If parsing fails, use text as message
           data = {
             success: false,
-            message: textData || "Unknown error occurred"
+            message: textData || "Unknown error occurred",
           };
         }
       }
-
 
       if (response.ok) {
         resp.success = true;
@@ -79,9 +76,12 @@ export async function POST(request: Request) {
       return NextResponse.json(resp, { status: 500 });
     }
   } catch (error) {
-    return NextResponse.json({
-      success: false,
-      message: "Invalid request format"
-    }, { status: 400 });
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Invalid request format",
+      },
+      { status: 400 }
+    );
   }
 }
