@@ -33,7 +33,8 @@ export default function RootLayout({
           flickerChance={0.1}
         />
         <Navbar />
-        {children}
+        <div className="relative z-10">{children}</div>
+        {/* {children} */}
       </body>
     </html>
   );

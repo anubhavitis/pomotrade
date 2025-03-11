@@ -1,5 +1,7 @@
-import TradeWidget from "@/components/TradeWidget";
+"use client";
+
 import React from "react";
+import TradeWidget from "@/components/trade-widget";
 
 export default function page() {
   return (
