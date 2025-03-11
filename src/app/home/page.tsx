@@ -2,26 +2,26 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { checkAuth, getUser } from "@/lib/auth";
+import { getUser } from "@/lib/auth";
 
 export default function HomePage() {
     const router = useRouter();
     const [name, setName] = useState<string | null>(null);
     const [email, setEmail] = useState<string | null>(null);
 
-    async function getAuthUser() {
-        const user = await getUser();
-        console.log("user", user);
-
-        if (!user) {
-            router.push("/login");
-        }
-
-        setName(user.data.name);
-        setEmail(user.data.email);
-    }
 
     useEffect(() => {
+        async function getAuthUser() {
+            const user = await getUser();
+            console.log("user", user);
+
+            if (!user) {
+                router.push("/login");
+            }
+
+            setName(user.data.name);
+            setEmail(user.data.email);
+        }
         getAuthUser();
     }, [router]);
 

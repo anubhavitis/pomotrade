@@ -15,14 +15,14 @@ import {
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import clsx from "clsx";
+import { AuthPageView } from "@/hooks/auth-page-hook";
 
-const Verify = ({
-  email,
-  onNavigate,
-}: {
+interface VerifyProps {
   email: string;
-  onNavigate: (view: string) => void;
-}) => {
+  onNavigate: (view: AuthPageView) => void;
+}
+
+const Verify = ({ email, onNavigate }: VerifyProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -87,7 +87,7 @@ const Verify = ({
       <Card className="w-full max-w-md backdrop-blur-sm border-white/5 bg-white/5">
         <CardHeader>
           <div
-            onClick={() => onNavigate("signup")}
+            onClick={() => onNavigate(AuthPageView.SignUp)}
             className="absolute top-4 left-4 cursor-pointer"
           >
             <FaArrowLeftLong className="text-white" size={20} />

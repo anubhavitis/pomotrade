@@ -14,27 +14,27 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
 
 import clsx from "clsx";
-import LoginPin from "./LoginPin";
+import { AuthPageView } from "@/hooks/auth-page-hook";
+
+interface SignInProps {
+  email: string;
+  setEmail: (email: string) => void;
+  onNavigate: (view: AuthPageView) => void;
+}
 
 export default function SignIn({
+  email,
+  setEmail,
   onNavigate,
-}: {
-  onNavigate: (view: string) => void;
-}) {
+}: SignInProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [email, setEmail] = useState<string | null>(null);
   const { toast } = useToast();
-  const router = useRouter();
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsLoading(true);
-
-    const formData = new FormData(event.currentTarget);
-    const emailInput = formData.get("email") as string;
 
     try {
       const response = await fetch("/api/auth/signin", {
@@ -42,7 +42,7 @@ export default function SignIn({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: emailInput }),
+        body: JSON.stringify({ email: email }),
       });
 
       const data: { message: string; success: boolean } = await response.json();
@@ -51,7 +51,6 @@ export default function SignIn({
         throw new Error(data.message || "Failed to Login");
       }
 
-      console.log("DATA: ", data);
 
       if (data.message) {
         // if status == 401 then show error message
@@ -63,8 +62,7 @@ export default function SignIn({
           title: "Success",
           description: "Login Pin sent to email",
         });
-        setEmail(emailInput);
-        // router.push("/verify");
+        onNavigate(AuthPageView.LoginPin);
       }
     } catch (error) {
       console.log("ERROR: ", error);
@@ -76,10 +74,6 @@ export default function SignIn({
     } finally {
       setIsLoading(false);
     }
-  }
-
-  if (email) {
-    return <LoginPin email={email} onNavigate={onNavigate} />;
   }
 
   return (
@@ -102,6 +96,8 @@ export default function SignIn({
               id="email"
               name="email"
               type="email"
+              value={email || ""}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="name@example.com"
               required
               disabled={isLoading}
@@ -124,7 +120,7 @@ export default function SignIn({
             type="button"
             variant="ghost"
             className="w-full text-white"
-            onClick={() => onNavigate("signup")}
+            onClick={() => onNavigate(AuthPageView.SignUp)}
             disabled={isLoading}
           >
             Need an account? Sign up

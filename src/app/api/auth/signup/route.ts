@@ -61,6 +61,7 @@ export async function POST(request: Request) {
           // Try to parse as JSON anyway
           data = JSON.parse(textData);
         } catch (e) {
+          console.log("error", e);
           // If parsing fails, use text as message
           data = {
             success: false,

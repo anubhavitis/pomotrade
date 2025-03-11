@@ -51,7 +51,7 @@ export async function refreshTokens(refreshToken: string): Promise<Tokens | null
     }
 }
 
-export async function fetchUserData(accessToken: string): Promise<any> {
+export async function fetchUserData(accessToken: string) {
     try {
         const response = await fetch('/api/auth', {
             method: 'GET',
@@ -73,9 +73,9 @@ export async function fetchUserData(accessToken: string): Promise<any> {
     }
 }
 
-export async function getUser(): Promise<any> {
+export async function getUser() {
     const tokens = getAuthTokens();
-    let accessToken = tokens.accessToken;
+    const accessToken = tokens.accessToken;
     const refreshToken = tokens.refreshToken;
 
     if (!accessToken) {
@@ -87,9 +87,7 @@ export async function getUser(): Promise<any> {
 
         if (result.response?.status === 401 && refreshToken) {
             // Try to refresh the token
-            console.log("refreshing tokens");
             const newTokens = await refreshTokens(refreshToken);
-            console.log("newTokens", newTokens);
             if (newTokens?.accessToken) {
                 // Retry the original request with the new access token
                 result = await fetchUserData(newTokens?.accessToken);

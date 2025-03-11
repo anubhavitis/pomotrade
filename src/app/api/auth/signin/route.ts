@@ -53,6 +53,7 @@ export async function POST(request: Request) {
           // Try to parse as JSON anyway
           data = JSON.parse(textData);
         } catch (e) {
+          console.log("error", e);
           // If parsing fails, use text as message
           data = {
             success: false,
@@ -71,15 +72,18 @@ export async function POST(request: Request) {
 
       return NextResponse.json(resp, { status: response.ok ? 200 : 400 });
     } catch (fetchError) {
+      console.log("fetchError", fetchError);
       resp.success = false;
       resp.message = "Failed to connect to authentication service";
       return NextResponse.json(resp, { status: 500 });
     }
   } catch (error) {
+    console.log("error", error);
     return NextResponse.json(
       {
         success: false,
         message: "Invalid request format",
+        error: error,
       },
       { status: 400 }
     );

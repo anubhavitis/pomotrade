@@ -18,14 +18,14 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import clsx from "clsx";
 import { setTokenCookies } from "@/lib/tokens";
+import { AuthPageView } from "@/hooks/auth-page-hook";
 
-export default function LoginPin({
-  email,
-  onNavigate,
-}: {
+interface LoginPinProps {
   email: string;
-  onNavigate: (view: string) => void;
-}) {
+  onNavigate: (view: AuthPageView) => void;
+}
+
+export default function LoginPin({ email, onNavigate }: LoginPinProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
@@ -92,7 +92,7 @@ export default function LoginPin({
       <Card className="w-full max-w-md backdrop-blur-sm border-white/5 bg-white/5">
         <CardHeader>
           <div
-            onClick={() => onNavigate("signin")}
+            onClick={() => onNavigate(AuthPageView.SignIn)}
             className="absolute top-4 left-4 cursor-pointer"
           >
             <FaArrowLeftLong className="text-white" size={20} />
