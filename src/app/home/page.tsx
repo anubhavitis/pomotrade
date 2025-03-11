@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getUser } from "@/lib/auth";
-
 export default function HomePage() {
     const router = useRouter();
     const [name, setName] = useState<string | null>(null);
@@ -16,7 +15,7 @@ export default function HomePage() {
             console.log("user", user);
 
             if (!user) {
-                router.push("/login");
+                router.push("/auth");
             }
 
             setName(user.data.name);

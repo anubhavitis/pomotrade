@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import clsx from "clsx";
 
 const Waitlist = () => {

@@ -1,6 +1,6 @@
 "use client";
-import Waitlist from "@/components/waitlist";
-import Landing from "@/components/landing";
+import Waitlist from "@/components/landing/waitlist";
+import Landing from "@/components/landing/landing";
 export default function Home() {
   return (
     <div>

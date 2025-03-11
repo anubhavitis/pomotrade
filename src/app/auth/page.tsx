@@ -1,9 +1,9 @@
 "use client";
 
-import SignIn from "@/components/signin";
-import SignUp from "@/components/signup";
-import LoginPin from "@/components/LoginPin";
-import Verify from "@/components/verify";
+import SignIn from "@/components/auth/signin";
+import SignUp from "@/components/auth/signup";
+import LoginPin from "@/components/auth/LoginPin";
+import Verify from "@/components/auth/verify";
 import type React from "react";
 
 import { useAuthPage, AuthPageView } from "@/hooks/auth-page-hook";
