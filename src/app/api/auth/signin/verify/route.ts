@@ -13,7 +13,7 @@ export async function POST(
             );
         }
 
-        const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/login/${email}/${pin}`;
+        const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/login/${encodeURIComponent(email)}/${encodeURIComponent(pin)}`;
 
         const backendResponse = await fetch(backendUrl, {
             method: "GET",
@@ -22,8 +22,7 @@ export async function POST(
             },
         });
 
-        // Get the response data
-        console.log("backendResponse", backendResponse);
+        const body = await backendResponse.json();
 
         if (!backendResponse.ok) {
             return NextResponse.json(
@@ -32,20 +31,19 @@ export async function POST(
             );
         }
 
+
         const data = {
             success: true,
             message: "Login successful",
+            tokens: {
+                accessToken: body.access_token,
+                refreshToken: body.refresh_token,
+            }
         };
 
         // Create the response with the data
         const response = NextResponse.json(data, {
             status: backendResponse.status,
-        });
-
-        // Forward all cookies from the backend response
-        const backendCookies = backendResponse.headers.getSetCookie();
-        backendCookies.forEach(cookie => {
-            response.headers.append('Set-Cookie', cookie);
         });
 
         return response;

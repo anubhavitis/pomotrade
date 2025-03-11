@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import clsx from "clsx";
+import { setTokenCookies } from "@/lib/tokens";
 
 export default function LoginPin({
   email,
@@ -58,10 +59,11 @@ export default function LoginPin({
         body: JSON.stringify({ email, pin }),
       });
 
-      console.log("LoginPin response", response);
-
       const data = await response.json();
-      console.log("Response data:", data);
+
+
+      const tokens = data.tokens;
+      setTokenCookies(tokens);
 
       if (!response.ok) {
         throw new Error(data.message || "Failed to Login");
