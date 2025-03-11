@@ -12,24 +12,14 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { useToast } from "@/hooks/use-toast"
 import { SettingsGearIcon } from "../ui/settings-gear"
-import { getAuthTokens } from "@/lib/tokens"
 import { HomeIcon } from "../ui/home"
-
-type WalletData = {
-    address: string;
-    api_key: string;
-    api_secret: string;
-    encrypted: boolean;
-    client: string;
-}
+import { getHLWallet, saveHLWallet } from "@/lib/hlWallet"
 
 export function SettingForm() {
     const title = "Add Hyperliquid Configs"
     const description = "We don't store your wallet configs on our servers. They are stored locally on your device."
     const [saveButton, setSaveButton] = useState("Save locally")
-    const { toast } = useToast()
 
     const [address, setAddress] = useState<string>("")
     const [api_key, setApiKey] = useState<string>("")
@@ -37,11 +27,12 @@ export function SettingForm() {
 
 
     async function getWallet() {
-        const data = JSON.parse(localStorage.getItem('pomotrade-hl-wallet') || "{}")
-
-        setAddress(data.address)
-        setApiKey(data.api_key)
-        setApiSecret(data.api_secret)
+        const data = getHLWallet()
+        if (data) {
+            setAddress(data.address)
+            setApiKey(data.api_key)
+            setApiSecret(data.api_secret)
+        }
     }
 
     async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -49,29 +40,15 @@ export function SettingForm() {
         setSaveButton("Saving...")
 
         try {
-
             const data = {
                 address: address,
                 api_key: api_key,
                 api_secret: api_secret
             }
 
-            // Save wallet data to localStorage
-            localStorage.setItem('pomotrade-hl-wallet', JSON.stringify(data));
-
-            toast({
-                title: "Success",
-                description: "Wallet configuration saved successfully.",
-            })
-
-            // Simulate API call
-
+            await saveHLWallet(data)
         } catch (error) {
-            toast({
-                variant: "destructive",
-                title: "Error",
-                description: "Something went wrong. Please try again.",
-            })
+            console.error(error)
         } finally {
             setSaveButton("Saved")
         }
