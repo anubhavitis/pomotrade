@@ -13,22 +13,16 @@ export default function TradeWidget() {
 
   const priceActionText = activeTab === "buy" ? "Buy" : "Sell";
 
-  const handleActiveTab = () => {
-    console.log("buy");
 
-    console.log("activeTab changed", activeTab === "buy" ? "sell" : "buy");
-
-    setActiveTab(activeTab === "buy" ? "sell" : "buy");
-  };
 
   return (
-    <div className="max-w-sm mx-auto min-h-svh p-1 mt-20">
+    <div className="max-w-full md:max-w-sm mx-auto min-h-svh p-0 md:p-1 mt-20 ">
       <div className="rounded-md overflow-hidden ">
         <div className="grid grid-cols-2">
           <Button
             variant="ghost"
-            onClick={handleActiveTab}
-            className={`py-7 text-center text-white  font-medium cursor-pointer rounded-none rounded-tl-md ${
+            onClick={()=> setActiveTab("buy")}
+            className={`py-4 md:py-7 text-center text-white  font-medium cursor-pointer rounded-none rounded-tl-md ${
               activeTab === "buy"
                 ? "bg-emerald-500 hover:bg-emerald-600"
                 : "bg-slate-800"
@@ -38,8 +32,8 @@ export default function TradeWidget() {
           </Button>
           <Button
             variant="ghost"
-            onClick={handleActiveTab}
-            className={`py-7 text-center text-white font-medium cursor-pointer rounded-none rounded-tr-md ${
+            onClick={()=> setActiveTab("sell")}
+            className={`py-4 md:py-7 text-center text-white font-medium cursor-pointer rounded-none rounded-tr-md ${
               activeTab === "sell"
                 ? "bg-rose-700 hover:bg-rose-800"
                 : "bg-slate-800"
@@ -49,8 +43,8 @@ export default function TradeWidget() {
           </Button>
         </div>
 
-        <div className="bg-slate-800 text-white p-3 rounded-b-md">
-          <div className="mb-4">
+        <div className="bg-slate-800 text-white p-1 md:p-3 rounded-b-md">
+          <div className=" md:mb-4">
             <p className="text-base">
               Order Type: <span className="font-medium">Limit</span>
             </p>

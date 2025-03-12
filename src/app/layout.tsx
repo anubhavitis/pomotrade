@@ -13,6 +13,12 @@ const geistSans = Inter({
 export const metadata: Metadata = {
   title: "PomoTrade",
   description: "Jump start your trading career with funded accounts",
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
 };
 
 export default function RootLayout({
@@ -26,7 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} antialiased bg-transparent w-screen h-screen flex flex-col text-white relative`}
       >
         <FlickeringGrid
-          className="absolute inset-0"
+          className="absolute inset-0 -z-[1]"
           squareSize={4}
           gridGap={6}
           color1="#ffffff"
@@ -35,7 +41,7 @@ export default function RootLayout({
           flickerChance={0.1}
         />
         <Navbar />
-        <main className="flex-grow overflow-y-auto">{children}</main>
+        <main className="flex-grow overflow-y-auto ">{children}</main>
         <Footer />
       </body>
     </html>

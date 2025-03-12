@@ -20,12 +20,12 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
-            <body
+
+            <div
                 className={`${geistSans.variable} antialiased bg-transparent w-screen h-screen flex flex-col text-white relative`}
             >
                 <FlickeringGrid
-                    className="absolute inset-0"
+                    className="absolute inset-0 -z-[1]"
                     squareSize={4}
                     gridGap={6}
                     color1="#ffffff"
@@ -37,7 +37,7 @@ export default function RootLayout({
                 <main className="flex-grow overflow-y-auto">
                     {children}
                 </main>
-            </body>
-        </html>
+            </div>
+     
     );
 }

@@ -22,7 +22,7 @@ interface VerifyProps {
   onNavigate: (view: AuthPageView) => void;
 }
 
-const Verify = ({ email, onNavigate }: VerifyProps) => {
+export default function Verify({ email, onNavigate }: VerifyProps){
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
