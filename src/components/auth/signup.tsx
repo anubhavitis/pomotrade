@@ -3,7 +3,6 @@
 import type React from "react";
 
 import { useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -15,17 +14,24 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
+
 import clsx from "clsx";
+import { AuthPageView } from "@/hooks/auth-page-hook";
+
+interface SignUpProps {
+  email: string;
+  setEmail: (email: string) => void;
+  onNavigate: (view: AuthPageView) => void;
+}
 
 export default function SignUp({
+  email,
+  setEmail,
   onNavigate,
-}: {
-  onNavigate: (view: string) => void;
-}) {
+}: SignUpProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const router = useRouter();
+
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -33,21 +39,25 @@ export default function SignUp({
 
     const formData = new FormData(event.currentTarget);
     const name = formData.get("name") as string;
-    const email = formData.get("email") as string;
-
+    const emailInput = formData.get("email") as string;
 
     try {
-
+      console.log("email", emailInput, " and name", name);
       const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, email }),
+        body: JSON.stringify({ name, email: emailInput }),
       });
 
+      if (!response.ok) {
+        console.log("failed response", response);
+        throw new Error("signup failed");
+      }
+
       const data = await response.json();
-      console.log("DATA: ", data);
+      console.log("signup DATA: ", data);
 
       if (response.ok) {
         toast({
@@ -55,7 +65,8 @@ export default function SignUp({
           description:
             "We sent you a signup link. Be sure to check your spam folder.",
         });
-        router.push("/verify");
+        setEmail(emailInput);
+        onNavigate(AuthPageView.Verify);
       } else {
         toast({
           variant: "destructive",
@@ -105,6 +116,8 @@ export default function SignUp({
               id="email"
               name="email"
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="john.doe@example.com"
               required
               disabled={isLoading}
@@ -114,7 +127,7 @@ export default function SignUp({
             <Button
               type="submit"
               className={clsx(
-                `w-full px-2 rounded-md border-x border-white/5 bg-transparent hover:bg-white hover:text-black transition-colors backdrop-blur-sm h-10 text-white placeholder:text-white/50`,
+                `w-full px-2 rounded-md border-x border-white/5 bg-transparent hover:bg-green-700 hover:text-black transition-colors backdrop-blur-sm h-10 text-white placeholder:text-white/50`,
                 isLoading ? "animate-breathing" : "hover:shadow-lg"
               )}
               disabled={isLoading}
@@ -128,7 +141,7 @@ export default function SignUp({
             type="button"
             variant="ghost"
             className="w-full text-white"
-            onClick={() => onNavigate("signin")}
+            onClick={() => onNavigate(AuthPageView.SignIn)}
             disabled={isLoading}
           >
             Already have an account? Sign in
