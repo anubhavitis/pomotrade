@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getUser } from "@/lib/auth";
 import TradingViewWidget from "@/components/trading/tradingview";
+import WebSocketDataDisplay from "@/components/websocket-data";
 export default function HomePage() {
   const router = useRouter();
   const [name, setName] = useState<string | null>(null);
@@ -30,6 +31,7 @@ export default function HomePage() {
         <h1 className="text-2xl text-white">Logged in!</h1>
         {name && <p className="text-lg text-white">{name}</p>}
         {email && <p className="text-lg text-white">{email}</p>}
+        <WebSocketDataDisplay />
       </div>
       <div className="col-span-5 col-start-1 min-h-screen lg:col-span-4 lg:col-start-2  sm:col-start-1">
         <TradingViewWidget />

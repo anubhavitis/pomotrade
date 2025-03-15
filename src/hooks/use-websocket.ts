@@ -1,0 +1,100 @@
+// hooks/useHyperliquid.js
+import { useEffect, useState, useCallback } from "react";
+
+import { Hyperliquid } from "hyperliquid";
+
+export interface CandleData {
+  t: number; // open millis
+  T: number; // close millis
+  s: string; // coin
+  i: string; // interval
+  o: number; // open price
+  c: number; // close price
+  h: number; // high price
+  l: number; // low price
+  v: number; // volume (base unit)
+  n: number; // number of trades
+}
+
+export interface AllMidData {
+  coin: string;
+  mid: string;
+  timestamp: number;
+}
+
+export function useHyperliquidWebSocket() {
+  const [wsData, setWsData] = useState<any>(null);
+  const [isConnected, setIsConnected] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const connect = useCallback(() => {
+    try {
+      const ws = new WebSocket("wss://api.hyperliquid-testnet.xyz/ws");
+
+      ws.onopen = () => {
+        setIsConnected(true);
+        setError(null);
+        console.log("Connected to Hyperliquid WebSocket");
+
+        // Subscribe to candles for BTC
+        const subscribeMessage = {
+          method: "subscribe",
+          subscription: {
+            type: "candle",
+            coin: "BTC",
+            interval: "1m",
+          },
+        };
+
+        ws.send(JSON.stringify(subscribeMessage));
+        console.log("Sent subscription:", subscribeMessage);
+      };
+
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          console.log("Received WebSocket message:", data);
+          setWsData(data); // Store all incoming messages
+        } catch (err) {
+          console.error("Error parsing WebSocket message:", err);
+        }
+      };
+
+      ws.onerror = (event) => {
+        setError("WebSocket error occurred");
+        console.error("WebSocket error:", event);
+      };
+
+      ws.onclose = () => {
+        setIsConnected(false);
+        setError("WebSocket connection closed");
+        console.log("WebSocket connection closed");
+
+        // Attempt to reconnect after 5 seconds
+        setTimeout(() => {
+          connect();
+        }, 5000);
+      };
+
+      return () => {
+        ws.close();
+      };
+    } catch (err) {
+      setError("Failed to connect to WebSocket");
+      console.error("Connection error:", err);
+    }
+  }, []);
+
+  useEffect(() => {
+    const cleanup = connect();
+    return () => {
+      if (cleanup) cleanup();
+    };
+  }, [connect]);
+
+  return {
+    data: wsData,
+    isConnected,
+    error,
+  };
+}
