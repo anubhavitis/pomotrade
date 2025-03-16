@@ -27,32 +27,29 @@ export default function HomePage() {
 
 
     return (
-        <div className="grid grid-cols-6 gap-4 my-28 border border-black mx-8 ">
+        <div className="grid grid-cols-12 my-28 border border-black ">
+            <div className="flex flex-col col-span-2 items-center justify-center gap-4 sm:hidden lg:block border border-yellow-500">
+                <h1 className="text-2xl text-white">
+                    Logged in!
+                </h1>
+                {name && (
+                    <p className="text-lg text-white ">
+                        {name}
+                    </p>
+                )}
+                {email && (
+                    <p className="text-lg text-white">
+                        {email}
+                    </p>
+                )}
+            </div>
+            <div className="col-span-6 lg:col-span-8 col-start-1 lg:col-start-3 min-h-screen border border-orange-500">
+                <p>TradingViewWidget </p>
+            </div>
+            <div className="col-span-2 lg:col-span-2  border border-red-500">
+                <TradeWidget />
+            </div>
 
-
-        <div className="flex flex-col items-center justify-center gap-4 sm:hidden  lg:block border border-yellow-500">
-
-            <h1 className="text-2xl text-white">
-                Logged in!
-            </h1>
-            {name && (
-                <p className="text-lg text-white ">
-                    {name}
-                </p>
-            )}
-            {email && (
-                <p className="text-lg text-white">
-                    {email}
-                </p>
-            )}
-        </div>
-        <div className="col-span-4 col-start-1 min-h-screen lg:col-span-4 lg:col-start-2 border border-orange-500">
-        <p>TradingViewWidget </p>
-      </div>
-        <div className="lg:col-span-1 col-span-2 border border-red-500">
-        <TradeWidget />
-        </div>
-            
         </div>
     );
 }

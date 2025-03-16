@@ -130,7 +130,7 @@ export function SettingForm() {
                     <DialogFooter className="pt-4">
                         <Button
                             type="submit"
-                            className={`w-full px-4 rounded-md bg-white/5 hover:bg-green-700 text-white hover:text-black transition-colors backdrop-blur-sm h-10 ${saveButton ? "animate-pulse" : "hover:shadow-lg"}`}
+                            className={`w-full px-4 rounded-md bg-white/5 hover:bg-emerald-700 text-white hover:text-black transition-colors backdrop-blur-sm h-10 ${saveButton ? "animate-pulse" : "hover:shadow-lg"}`}
                         >
                             <HomeIcon className=" hover:text-black hover:bg-transparent" />
                             {saveButton}

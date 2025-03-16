@@ -127,7 +127,7 @@ export default function SignUp({
             <Button
               type="submit"
               className={clsx(
-                `w-full px-2 rounded-md border-x border-white/5 bg-transparent hover:bg-green-700 hover:text-black transition-colors backdrop-blur-sm h-10 text-white placeholder:text-white/50`,
+                `w-full px-2 rounded-md border-x border-white/5 bg-transparent hover:bg-emerald-700 hover:text-black transition-colors backdrop-blur-sm h-10 text-white placeholder:text-white/50`,
                 isLoading ? "animate-breathing" : "hover:shadow-lg"
               )}
               disabled={isLoading}

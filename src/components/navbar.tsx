@@ -8,7 +8,7 @@ const AuthNavbar = () => {
         <nav className="p-8 absolute z-10 inset-0 w-screen h-fit flex justify-between items-center">
             <div>
                 <Link href="/" className="hover:scale-105 transition-transform duration-300 flex items-center gap-4 justify-center">
-                    <Image src="/PomoTrade.svg" alt="PomoTrade" width={48} height={48} />
+                    <Image src="/PomoTrade.svg" alt="PomoTrade" width={48} height={48} priority />
                     <h1 className="text-sm md:text-2xl leading-none font-bold transition-transform duration-300">
                         PomoTrade
                     </h1>
