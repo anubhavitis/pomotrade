@@ -20,6 +20,13 @@ const Header = () => {
     );
 };
 
+const NavbarWrapper = ({ children }: { children: React.ReactNode }) => (
+    <nav className="p-8 absolute inset-0 w-screen h-fit flex justify-between items-center">
+        <Header />
+        {children}
+    </nav>
+);
+
 const Navbar = () => {
     const [user, setUser] = useState<any>(null);
 
@@ -37,27 +44,21 @@ const Navbar = () => {
 export default Navbar;
 
 
-const PublicNavbar = () => {
-
-    return <nav className="p-8 absolute z-10 inset-0 w-screen h-fit flex justify-between items-center">
-        <Header />
+const PublicNavbar = () => (
+    <NavbarWrapper>
         <div>
             <Link href="https://x.com/pomotrade" target="_blank">
                 <AiOutlineX size={20} />
             </Link>
         </div>
-    </nav>
-}
+    </NavbarWrapper>
+);
 
-
-const AuthNavbar = () => {
-    return (
-        <nav className="p-8 absolute z-10 inset-0 w-screen h-fit flex justify-between items-center">
-            <Header />
-            <div className="flex items-center gap-4">
-                <SettingForm />
-                <UserIcon className="hover:bg-transparent" />
-            </div>
-        </nav>
-    );
-};
+const AuthNavbar = () => (
+    <NavbarWrapper>
+        <div className="flex items-center gap-4">
+            <SettingForm />
+            <UserIcon className="hover:bg-transparent" />
+        </div>
+    </NavbarWrapper>
+);
