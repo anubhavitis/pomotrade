@@ -21,7 +21,7 @@ const Header = () => {
 };
 
 const NavbarWrapper = ({ children }: { children: React.ReactNode }) => (
-    <nav className="p-8 absolute inset-0 w-screen h-fit flex justify-between items-center">
+    <nav className="p-8 absolute z-10 inset-0 w-screen h-fit flex justify-between items-center">
         <Header />
         {children}
     </nav>
