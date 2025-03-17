@@ -27,7 +27,6 @@ export async function POST(request: NextRequest) {
         });
 
         const data = await response.json() as RefreshResponse;
-        console.log("data", data);
         return NextResponse.json(data);
 
     } catch (error) {

@@ -17,10 +17,10 @@ export default function HomePage() {
 
             if (!user) {
                 router.push("/auth");
+            } else {
+                setName(user.name);
+                setEmail(user.email);
             }
-
-            setName(user.data.name);
-            setEmail(user.data.email);
         }
         getAuthUser();
     }, [router]);

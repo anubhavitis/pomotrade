@@ -42,7 +42,6 @@ export default function SignUp({
     const emailInput = formData.get("email") as string;
 
     try {
-      console.log("email", emailInput, " and name", name);
       const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {

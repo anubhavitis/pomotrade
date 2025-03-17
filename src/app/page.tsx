@@ -1,7 +1,6 @@
 "use client";
 import Waitlist from "@/components/landing/waitlist";
 import Landing from "@/components/landing/landing";
-import { useState } from "react";
 import { useEffect } from "react";
 import { getUser } from "@/lib/auth";
 import { useRouter } from "next/navigation";

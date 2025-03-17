@@ -4,7 +4,7 @@ import Link from "next/link";
 import { AiOutlineX } from "react-icons/ai";
 import { UserIcon } from "@/components/ui/user";
 import { SettingForm } from "@/components/wallet/setting-modal-form";
-import { getUser } from "@/lib/auth";
+import { getUser, User } from "@/lib/auth";
 import { useEffect, useState } from "react";
 
 const Header = () => {
@@ -28,7 +28,7 @@ const NavbarWrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 const Navbar = () => {
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
         const fetchUser = async () => {

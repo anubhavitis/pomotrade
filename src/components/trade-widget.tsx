@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -11,8 +11,12 @@ export default function TradeWidget() {
   const [totalValue, setTotalValue] = useState("₹10,00,005");
   const [approximateValue, setApproximateValue] = useState("₹98,00,000.03");
 
-  const priceActionText = activeTab === "buy" ? "Buy" : "Sell";
+  // const priceActionText = activeTab === "buy" ? "Buy" : "Sell";
 
+  useEffect(() => {
+    setApproximateValue("₹98,00,000.03");
+    setTotalValue("₹10,00,005");
+  }, []);
 
 
   return (
