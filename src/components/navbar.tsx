@@ -1,25 +1,64 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { AiOutlineX } from "react-icons/ai";
 import { UserIcon } from "@/components/ui/user";
-import { SettingForm } from "./wallet/setting-modal-form";
+import { SettingForm } from "@/components/wallet/setting-modal-form";
+import { getUser, User } from "@/lib/auth";
+import { useEffect, useState } from "react";
 
-const AuthNavbar = () => {
+const Header = () => {
     return (
-        <nav className="p-8 absolute z-10 inset-0 w-screen h-fit flex justify-between items-center">
-            <div>
-                <Link href="/" className="hover:scale-105 transition-transform duration-300 flex items-center gap-4 justify-center">
-                    <Image src="/PomoTrade.svg" alt="PomoTrade" width={48} height={48} />
-                    <h1 className="text-sm md:text-2xl leading-none font-bold transition-transform duration-300">
-                        PomoTrade
-                    </h1>
-                </Link>
-            </div>
-            <div className="flex items-center gap-4">
-                <SettingForm />
-                <UserIcon className="hover:bg-transparent" />
-            </div>
-        </nav>
+        <div>
+            <Link href="/" className="flex items-center gap-1 justify-center">
+                <Image src="/logo.png" alt="PomoTrade" width={48} height={48} />
+                <h1 className="text-sm md:text-2xl leading-none font-bold ">
+                    PomoTrade
+                </h1>
+            </Link>
+        </div>
     );
 };
 
-export default AuthNavbar;
+const NavbarWrapper = ({ children }: { children: React.ReactNode }) => (
+    <nav className="p-8 absolute z-10 inset-0 w-screen h-fit flex justify-between items-center">
+        <Header />
+        {children}
+    </nav>
+);
+
+const Navbar = () => {
+    const [user, setUser] = useState<User | null>(null);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const user = await getUser();
+            setUser(user);
+        };
+        fetchUser();
+    }, []);
+
+    return user ? <AuthNavbar /> : <PublicNavbar />
+};
+
+export default Navbar;
+
+
+const PublicNavbar = () => (
+    <NavbarWrapper>
+        <div>
+            <Link href="https://x.com/pomotrade" target="_blank">
+                <AiOutlineX size={20} />
+            </Link>
+        </div>
+    </NavbarWrapper>
+);
+
+const AuthNavbar = () => (
+    <NavbarWrapper>
+        <div className="flex items-center gap-4">
+            <SettingForm />
+            <UserIcon className="hover:bg-transparent" />
+        </div>
+    </NavbarWrapper>
+);

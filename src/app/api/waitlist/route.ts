@@ -39,9 +39,6 @@ async function createContact(email: string): Promise<boolean> {
     body: JSON.stringify(body),
   });
 
-  const resp = await response.json();
-  console.log("value of create contact response", resp);
-
   if (response.ok == true && response.statusText == "Created") {
     return true;
   }

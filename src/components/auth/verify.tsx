@@ -22,7 +22,7 @@ interface VerifyProps {
   onNavigate: (view: AuthPageView) => void;
 }
 
-const Verify = ({ email, onNavigate }: VerifyProps) => {
+export default function Verify({ email, onNavigate }: VerifyProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -117,7 +117,7 @@ const Verify = ({ email, onNavigate }: VerifyProps) => {
             <Button
               type="submit"
               className={clsx(
-                `w-full px-2 rounded-md border-x border-white/5 bg-transparent hover:bg-green-700 hover:text-black transition-colors backdrop-blur-sm h-10 text-white placeholder:text-white/50`,
+                `w-full px-2 rounded-md border-x border-white/5 bg-transparent hover:bg-emerald-700 hover:text-black transition-colors backdrop-blur-sm h-10 text-white placeholder:text-white/50`,
                 isLoading ? "animate-breathing" : "hover:shadow-lg"
               )}
               disabled={isLoading}
@@ -130,6 +130,4 @@ const Verify = ({ email, onNavigate }: VerifyProps) => {
       </Card>
     </div>
   );
-};
-
-export default Verify;
+}

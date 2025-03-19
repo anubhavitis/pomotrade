@@ -14,7 +14,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-
 import clsx from "clsx";
 import { AuthPageView } from "@/hooks/auth-page-hook";
 
@@ -31,6 +30,7 @@ export default function SignIn({
 }: SignInProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -106,7 +106,7 @@ export default function SignIn({
             <Button
               type="submit"
               className={clsx(
-                `w-full px-2 rounded-md border-x border-white/5 bg-transparent hover:bg-green-700 hover:text-black transition-colors backdrop-blur-sm h-10 text-white placeholder:text-white/50`,
+                `w-full px-2 rounded-md border-x border-white/5 bg-transparent hover:bg-emerald-700 hover:text-black transition-colors backdrop-blur-sm h-10 text-white placeholder:text-white/50`,
                 isLoading ? "animate-breathing" : "hover:shadow-lg"
               )}
               disabled={isLoading}

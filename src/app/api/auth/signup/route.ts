@@ -47,8 +47,6 @@ export async function POST(request: Request) {
         body: JSON.stringify(body),
       });
 
-      console.log("response status:", response.status);
-
       // Handle different response types
       let data;
       const contentType = response.headers.get("content-type");

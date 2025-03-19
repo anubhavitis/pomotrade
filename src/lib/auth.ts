@@ -73,7 +73,20 @@ export async function fetchUserData(accessToken: string) {
     }
 }
 
-export async function getUser() {
+export interface User {
+    ID: number;
+    CreatedAt: string;
+    UpdatedAt: string;
+    DeletedAt: string | null;
+    uuid: string;
+    last_login: string;
+    email: string;
+    name: string;
+    verified: boolean;
+}
+
+
+export async function getUser(): Promise<User | null> {
     const tokens = getAuthTokens();
     const accessToken = tokens.accessToken;
     const refreshToken = tokens.refreshToken;
