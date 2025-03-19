@@ -6,6 +6,7 @@ import { getUser } from "@/lib/auth";
 import TradingViewWidget from "@/components/trading/tradingview";
 import WebSocketDataDisplay from "@/components/websocket-data";
 import TradeWidget from "@/components/trade-widget";
+
 export default function HomePage() {
   const router = useRouter();
   const [name, setName] = useState<string | null>(null);
@@ -32,8 +33,8 @@ export default function HomePage() {
 
 
   return (
-    <div className="grid grid-cols-12 my-28 border border-black ">
-      <div className="flex flex-col col-span-2 items-center justify-center gap-4 sm:hidden lg:block border border-yellow-500">
+    <div className="h-[calc(100vh-64px)] grid grid-cols-12 gap-2 overflow-hidden p-2">
+      <div className="flex flex-col col-span-2 items-center justify-center gap-4 sm:hidden lg:block">
         <h1 className="text-2xl text-white">
           Logged in!
         </h1>
@@ -48,13 +49,12 @@ export default function HomePage() {
           </p>
         )}
       </div>
-      <div className="col-span-5 col-start-1 min-h-screen lg:col-span-4 lg:col-start-2  sm:col-start-1">
+      <div className="col-span-8 col-start-3 lg:col-span-8 lg:col-start-3 sm:col-start-2 h-full">
         <TradingViewWidget />
       </div>
-      <div className="col-span-2 lg:col-span-2  border border-red-500">
+      <div className="col-span-2 lg:col-span-2 h-full overflow-hidden">
         <TradeWidget />
       </div>
-
     </div>
   );
 }

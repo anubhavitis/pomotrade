@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Footer from "@/components/landing/footer";
 import { FlickeringGrid } from "@/components/ui/flickering-grid";
 import Navbar from "@/components/navbar";
 
@@ -30,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} antialiased bg-transparent w-screen h-screen flex flex-col text-white relative`}
+        className={`${geistSans.variable} antialiased bg-transparent w-screen h-screen flex flex-col text-white relative overflow-hidden`}
       >
         <FlickeringGrid
           className="absolute inset-0 -z-[1]"
@@ -42,8 +41,9 @@ export default function RootLayout({
           flickerChance={0.1}
         />
         <Navbar />
-        <main className="flex-grow overflow-y-auto">{children}</main>
-        <Footer />
+        <main className="flex-grow pt-16 overflow-hidden">
+          {children}
+        </main>
       </body>
     </html>
   );

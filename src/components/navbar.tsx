@@ -11,8 +11,8 @@ const Header = () => {
     return (
         <div>
             <Link href="/" className="flex items-center gap-1 justify-center">
-                <Image src="/logo.png" alt="PomoTrade" width={48} height={48} />
-                <h1 className="text-sm md:text-2xl leading-none font-bold ">
+                <Image src="/logo.png" alt="PomoTrade" width={40} height={40} />
+                <h1 className="text-sm md:text-xl leading-none font-bold">
                     PomoTrade
                 </h1>
             </Link>
@@ -21,7 +21,7 @@ const Header = () => {
 };
 
 const NavbarWrapper = ({ children }: { children: React.ReactNode }) => (
-    <nav className="p-8 absolute z-10 inset-0 w-screen h-fit flex justify-between items-center">
+    <nav className="h-12 fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-sm px-4 flex justify-between items-center">
         <Header />
         {children}
     </nav>

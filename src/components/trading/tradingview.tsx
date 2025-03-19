@@ -43,7 +43,7 @@ const TradingViewWidget: React.FC = () => {
         className="tradingview-widget-container__widget"
         style={{ height: "calc(100% - 32px)", width: "100%" }}
       ></div>
-      <div className="tradingview-widget-copyright">
+      {/* <div className="tradingview-widget-copyright">
         <a
           href="https://www.tradingview.com/"
           rel="noopener nofollow"
@@ -51,7 +51,7 @@ const TradingViewWidget: React.FC = () => {
         >
           <span className="blue-text">Track all markets on TradingView</span>
         </a>
-      </div>
+      </div> */}
     </div>
   );
 };

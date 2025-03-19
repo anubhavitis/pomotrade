@@ -20,7 +20,7 @@ export default function TradeWidget() {
 
 
   return (
-    <div className="max-w-full md:max-w-sm mx-auto min-h-svh p-0 md:p-1 mt-20 text-sm">
+    <div className="max-w-full md:max-w-sm mx-auto min-h-svh p-0 text-sm">
       <div className="overflow-hidden">
         <div className="grid grid-cols-2">
           <Button
