@@ -6,30 +6,27 @@ import { getUser } from "@/lib/auth";
 import TradingViewWidget from "@/components/trading/tradingview";
 import WebSocketDataDisplay from "@/components/websocket-data";
 import TradeWidget from "@/components/trade-widget";
+import { TVChartContainer } from "@/components/trading/advanced/trading-view";
 
 export default function HomePage() {
   const router = useRouter();
   const [name, setName] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function getAuthUser() {
-      const user = await getUser();
-      console.log("user", user);
+  // useEffect(() => {
+  //   async function getAuthUser() {
+  //     const user = await getUser();
+  //     console.log("user", user);
 
-      if (!user) {
-        router.push("/auth");
-      }
-
-      if (!user) {
-        router.push("/auth");
-      } else {
-        setName(user.name);
-        setEmail(user.email);
-      }
-    }
-    getAuthUser();
-  }, [router]);
+  //     if (!user) {
+  //       router.push("/auth");
+  //     } else {
+  //       setName(user.name);
+  //       setEmail(user.email);
+  //     }
+  //   }
+  //   getAuthUser();
+  // }, [router]);
 
 
   return (
@@ -50,10 +47,11 @@ export default function HomePage() {
         )}
       </div>
       <div className="col-span-8 col-start-3 lg:col-span-8 lg:col-start-3 sm:col-start-2 h-full">
-        <TradingViewWidget />
+        {/* <TradingViewWidget /> */}
       </div>
       <div className="col-span-2 lg:col-span-2 h-full overflow-hidden">
-        <TradeWidget />
+        {/* <TradeWidget /> */}
+        <TVChartContainer />
       </div>
     </div>
   );
