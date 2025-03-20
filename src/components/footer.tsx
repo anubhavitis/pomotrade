@@ -2,14 +2,29 @@ import React from 'react';
 
 const Footer: React.FC = () => {
     return (
-        <footer className="w-full bg-white/2 backdrop-blur-sm mt-auto py-2">
-            <div className="container mx-auto px-4">
-                <div className="flex flex-col items-center justify-center">
-                    <p className="text-gray-600 text-center font-medium">
-                        © 2025, pomotrade.com
-                    </p>
+        <div className="relative z-20 pointer-events-auto">
+            <div className="z-20 m-2 flex justify-center items-center">
+                <div className="font-medium text-gray-600">
+                    Charts are powered by
+                </div>
+                <a
+                    href="https://tradingview.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline ml-1 text-gray-600 hover:text-white transition-colors cursor-pointer"
+                >
+                    TradingView
+                </a>
+            </div>
 
-                    {/* Commented out links and social icons for now
+            <footer className="w-full bg-white/2 backdrop-blur-sm mt-auto py-2 relative z-20">
+                <div className="container mx-auto px-4">
+                    <div className="flex flex-col items-center justify-center">
+                        <p className="text-gray-600 text-center font-medium">
+                            © 2025, pomotrade.com
+                        </p>
+
+                        {/* Commented out links and social icons for now
                     <div className="flex space-x-8 mb-4">
                         <a href="/about" className="text-white hover:text-white/80 transition-colors text-sm">
                             About
@@ -42,9 +57,10 @@ const Footer: React.FC = () => {
                             </svg>
                         </a>
                     </div> */}
+                    </div>
                 </div>
-            </div>
-        </footer>
+            </footer>
+        </div>
     );
 };
 

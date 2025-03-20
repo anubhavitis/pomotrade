@@ -4,7 +4,7 @@ import { AiOutlineX } from "react-icons/ai";
 
 const Navbar = () => {
   return (
-    <nav className="p-8 absolute z-10 inset-0 w-screen h-fit flex justify-between items-center">
+    <nav className="p-8 absolute z-20 inset-0 w-screen h-fit flex justify-between items-center">
       <div>
         <Link href="/" className="flex items-center gap-4 justify-center">
           <Image src="/PomoTrade.svg" alt="PomoTrade" width={48} height={48} />
