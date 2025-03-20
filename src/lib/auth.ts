@@ -115,7 +115,7 @@ export async function getUser(): Promise<User | null> {
             return null;
         }
 
-        return result.data;
+        return result.data.data;
     } catch (error) {
         console.error('Error getting user:', error);
         return null;

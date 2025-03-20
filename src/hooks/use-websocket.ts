@@ -1,8 +1,6 @@
 // hooks/useHyperliquid.js
 import { useEffect, useState, useCallback } from "react";
 
-import { Hyperliquid } from "hyperliquid";
-
 export interface CandleData {
   t: number; // open millis
   T: number; // close millis
