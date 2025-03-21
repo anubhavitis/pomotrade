@@ -8,57 +8,57 @@ import { getUser, User } from "@/lib/auth";
 import { useEffect, useState } from "react";
 
 const Header = () => {
-    return (
-        <div>
-            <Link href="/" className="flex items-center gap-1 justify-center">
-                <Image src="/logo.png" alt="PomoTrade" width={40} height={40} />
-                <h1 className="text-sm md:text-xl leading-none font-bold">
-                    PomoTrade
-                </h1>
-            </Link>
-        </div>
-    );
+  return (
+    <div>
+      <Link href="/" className="flex items-center gap-1 justify-center">
+        <Image src="/logo.png" alt="PomoTrade" width={40} height={40} />
+        <h1 className="text-sm md:text-xl leading-none font-bold">
+          PomoTrade
+        </h1>
+      </Link>
+    </div>
+  );
 };
 
 const NavbarWrapper = ({ children }: { children: React.ReactNode }) => (
-    <nav className="flex fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-sm px-4 justify-between items-center">
-        <Header />
-        {children}
-    </nav>
+  <nav className="flex fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-sm px-4 justify-between items-center">
+    <Header />
+    {children}
+  </nav>
 );
 
 const Navbar = () => {
-    const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            const user = await getUser();
-            setUser(user);
-        };
-        fetchUser();
-    }, []);
+  useEffect(() => {
+    const fetchUser = async () => {
+      const user = await getUser();
+      setUser(user);
+    };
+    fetchUser();
+  }, []);
 
-    return user ? <AuthNavbar /> : <PublicNavbar />
+  return user ? <AuthNavbar /> : <PublicNavbar />
 };
 
 export default Navbar;
 
 
 const PublicNavbar = () => (
-    <NavbarWrapper>
-        <div>
-            <Link href="https://x.com/pomotrade" target="_blank">
-                <AiOutlineX size={20} />
-            </Link>
-        </div>
-    </NavbarWrapper>
+  <NavbarWrapper>
+    <div>
+      <Link href="https://x.com/pomotrade" target="_blank">
+        <AiOutlineX size={20} />
+      </Link>
+    </div>
+  </NavbarWrapper>
 );
 
 const AuthNavbar = () => (
-    <NavbarWrapper>
-        <div className="flex items-center gap-4">
-            <SettingForm />
-            <UserIcon className="hover:bg-transparent" />
-        </div>
-    </NavbarWrapper>
+  <NavbarWrapper>
+    <div className="flex items-center gap-4">
+      <SettingForm />
+      <UserIcon className="hover:bg-transparent" />
+    </div>
+  </NavbarWrapper>
 );
