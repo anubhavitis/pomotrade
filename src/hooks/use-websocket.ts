@@ -27,7 +27,7 @@ export function useHyperliquidWebSocket() {
 
   const connect = useCallback(() => {
     try {
-      const ws = new WebSocket("wss://api.hyperliquid-testnet.xyz/ws");
+      const ws = new WebSocket("wss://api.hyperliquid.xyz/ws");
 
       ws.onopen = () => {
         setIsConnected(true);

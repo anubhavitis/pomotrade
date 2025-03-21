@@ -41,9 +41,9 @@ export default function RootLayout({
           maxOpacity={0.1}
           flickerChance={0.1}
         />
-        <div className="relative z-10 flex flex-col min-h-screen">
+        <div className="flex flex-col gap-2">
           <Navbar />
-          <main className="flex-grow overflow-y-auto">
+          <main className="grow">
             {children}
           </main>
           <Footer />
