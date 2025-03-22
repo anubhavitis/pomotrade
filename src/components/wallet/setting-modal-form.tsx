@@ -65,7 +65,7 @@ export function SettingForm() {
                     <SettingsGearIcon className="hover:bg-transparent z-10 pointer-events-auto block" />
                 </button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[425px] border border-white/5 bg-black/50 shadow-lg backdrop-blur-xl">
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                     <DialogDescription>
@@ -96,7 +96,7 @@ export function SettingForm() {
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
                             required
-                            className="w-full rounded-md border-x border-white/5 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
+                            className="w-full rounded-md border border-white/10 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
                         />
                     </div>
                     <div className="space-y-2">
@@ -110,7 +110,7 @@ export function SettingForm() {
                             value={api_key}
                             onChange={(e) => setApiKey(e.target.value)}
                             required
-                            className="w-full rounded-md border-x border-white/5 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
+                            className="w-full rounded-md border border-white/10 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
                         />
                     </div>
                     <div className="space-y-2">
@@ -124,13 +124,15 @@ export function SettingForm() {
                             value={api_secret}
                             onChange={(e) => setApiSecret(e.target.value)}
                             required
-                            className="w-full rounded-md border-x border-white/5 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
+                            className="w-full rounded-md border border-white/10 focus:border-white bg-transparent backdrop-blur-sm h-10 text-white placeholder:text-white/50"
                         />
                     </div>
                     <DialogFooter className="pt-4">
                         <Button
                             type="submit"
-                            className={`w-full px-4 rounded-md bg-white/5 hover:bg-emerald-700 text-white hover:text-black transition-colors backdrop-blur-sm h-10 ${saveButton ? "animate-pulse" : "hover:shadow-lg"}`}
+                            className={`w-full px-4 rounded-md bg-white/5 hover:bg-emerald-700 text-white
+                                 hover:text-black transition-colors backdrop-blur-sm h-10 border border-white/5
+                                 ${saveButton ? "animate-pulse" : "hover:shadow-lg"}`}
                         >
                             <HomeIcon className=" hover:text-black hover:bg-transparent" />
                             {saveButton}

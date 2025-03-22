@@ -7,7 +7,7 @@ function Landing() {
         <p className="text-xl sm:text-2xl md:text-6xl w-full font-extrabold 
         bg-gradient-to-r from-gray-500 via-gray-100 to-gray-600 
         text-transparent bg-clip-text">
-          Trading on steroids
+          Crafting Tomorrow&apos;s Traders, Today
         </p>
         <p className="w-5/6 lg:w-full text-sm sm:text-md md:text-base text-stone-500">
           Transform your trading approach with AI-powered insights and structured learning - because smart tools create smarter traders. <br />

@@ -2,8 +2,8 @@ import React from 'react';
 
 const Footer: React.FC = () => {
     return (
-        <div className="relative z-20 pointer-events-auto">
-            <div className="z-20 m-2 flex justify-center items-center">
+        <div className="relative z-1 pointer-events-auto">
+            <div className="m-2 flex justify-center items-center">
                 <div className="font-medium text-gray-600">
                     Charts are powered by
                 </div>
@@ -17,7 +17,7 @@ const Footer: React.FC = () => {
                 </a>
             </div>
 
-            <footer className="w-full bg-white/2 backdrop-blur-sm mt-auto py-2 relative z-20">
+            <footer className="w-full bg-white/2 backdrop-blur-sm mt-auto py-2 relative">
                 <div className="container mx-auto px-4">
                     <div className="flex flex-col items-center justify-center">
                         <p className="text-gray-600 text-center font-medium">

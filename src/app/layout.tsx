@@ -30,10 +30,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} antialiased bg-transparent w-screen h-screen flex flex-col text-white relative`}
+        className={`${geistSans.variable} antialiased bg-transparent w-screen flex flex-col text-white relative`}
       >
         <FlickeringGrid
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0 pointer-events-none z-0"
           squareSize={4}
           gridGap={6}
           color1="#ffffff"
@@ -41,7 +41,7 @@ export default function RootLayout({
           maxOpacity={0.1}
           flickerChance={0.1}
         />
-        <div className="h-full w-full flex flex-col gap-2">
+        <div className="relative h-full w-full flex flex-col gap-2 z-2 px-2">
           <Navbar />
           <main className="grow h-full w-full">
             {children}

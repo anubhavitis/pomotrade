@@ -28,12 +28,12 @@ export default function OrderBook() {
     };
 
     const sortBids = (bids: OrderBookLevel[] | undefined, n: number = 14): EnhancedOrderBookLevel[] => {
-        const sorted = (bids?.slice().sort((a, b) => parseFloat(b.px) - parseFloat(a.px)) || []).slice(0, n);
+        const sorted = (bids?.slice().sort((a, b) => a.n - b.n) || []).slice(0, n);
         return processLevels(sorted);
     };
 
     const sortAsks = (asks: OrderBookLevel[] | undefined, n: number = 14): EnhancedOrderBookLevel[] => {
-        const sorted = (asks?.slice().sort((a, b) => parseFloat(a.px) - parseFloat(b.px)) || []).slice(0, n);
+        const sorted = (asks?.slice().sort((a, b) => b.n - a.n) || []).slice(0, n);
         return processLevels(sorted);
     };
 
@@ -41,7 +41,7 @@ export default function OrderBook() {
     const asks = useMemo(() => sortAsks(orderbookData?.data?.levels?.[1]), [orderbookData?.data?.levels]);
 
     return (
-        <div className="flex flex-col h-full w-full rounded-lg bg-black text-sm">
+        <div className="flex flex-col h-full w-full rounded-lg bg-black text-sm border border-white/10">
             <div className="px-4 py-2 flex flex-row justify-between text-gray-400 border-b border-gray-800">
                 <div>Price</div>
                 <div>Size</div>
@@ -56,7 +56,7 @@ export default function OrderBook() {
                     >
                         <div className="text-[#ff4976]">{parseFloat(ask.px).toLocaleString()}</div>
                         <div className="text-gray-300">{formatNumber(parseFloat(ask.sz))}</div>
-                        <div className="text-gray-300">{formatNumber(ask.total)}</div>
+                        <div className="text-gray-300">{formatNumber(ask.n)}</div>
                     </div>
                 ))}
             </div>
@@ -75,7 +75,7 @@ export default function OrderBook() {
                     >
                         <div className="text-[#00c087]">{parseFloat(bid.px).toLocaleString()}</div>
                         <div className="text-gray-300">{formatNumber(parseFloat(bid.sz))}</div>
-                        <div className="text-gray-300">{formatNumber(bid.total)}</div>
+                        <div className="text-gray-300">{formatNumber(bid.n)}</div>
                     </div>
                 ))}
             </div>
