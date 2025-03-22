@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { getUser } from "@/lib/auth";
 import TradingViewWidget from "@/components/trading/tradingview";
 import TradeWidget from "@/components/trade-widget";
+import OrderBook from "@/components/orderbook";
 
 export default function HomePage() {
   const router = useRouter();
@@ -20,18 +21,15 @@ export default function HomePage() {
     getAuthUser();
   }, [router]);
 
-
   return (
-    <div className="flex flex-row gap-2 overflow-hidden p-2 w-full h-full">
-      <div className="h-full grow self-stretch">
+    <div className="flex flex-row gap-1 p-2 w-full h-full my-2">
+      <div className="h-full w-full grow self-stretch">
         <TradingViewWidget />
       </div>
-      <div className="h-full overflow-hidden w-[250px] flex border-2 border-emerald-600">
-        <h1 className="text-2xl text-white">
-          OrderBook here
-        </h1>
+      <div className="h-full w-[250px] shrink-0 flex">
+        <OrderBook />
       </div>
-      <div className="h-full overflow-hidden w-[260px] flex">
+      <div className="h-full w-[260px] shrink-0 flex">
         <TradeWidget />
       </div>
     </div>

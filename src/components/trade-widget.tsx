@@ -20,13 +20,13 @@ export default function TradeWidget() {
 
 
   return (
-    <div className="max-w-full md:max-w-sm mx-auto min-h-svh p-0 text-sm">
-      <div className="overflow-hidden">
-        <div className="grid grid-cols-2">
+    <div className="max-w-full md:max-w-sm text-sm">
+      <div className="overflow-hidden rounded-lg border border-white/10">
+        <div className="flex flex-row">
           <Button
             variant="ghost"
             onClick={() => setActiveTab("buy")}
-            className={`py-4 md:py-7 text-center rounded-none font-medium cursor-pointer ${activeTab === "buy"
+            className={`py-4 md:py-7 w-full text-center rounded-none font-medium cursor-pointer ${activeTab === "buy"
               ? "bg-white/10 backdrop-blur-lg hover:bg-white/20 text-emerald-500 font-bold"
               : "bg-black/5 backdrop-blur-sm"
               } hover:text-emerald-500 hover:font-bold `}
@@ -36,7 +36,7 @@ export default function TradeWidget() {
           <Button
             variant="ghost"
             onClick={() => setActiveTab("sell")}
-            className={`py-4 md:py-7 text-center text-white font-medium cursor-pointer rounded-none ${activeTab === "sell"
+            className={`py-4 md:py-7 w-full text-center text-white font-medium cursor-pointer rounded-none ${activeTab === "sell"
               ? "bg-white/10 backdrop-blur-lg hover:bg-white/20 text-rose-500 font-bold"
               : "bg-black/5 backdrop-blur-md"
               } hover:text-rose-500 hover:font-bold`}
