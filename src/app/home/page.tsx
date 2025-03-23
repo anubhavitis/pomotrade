@@ -7,8 +7,10 @@ import TradingViewWidget from "@/components/trading/tradingview";
 import TradeWidget from "@/components/trade-widget";
 import OrderBook from "@/components/orderbook";
 import { Select, SelectValue, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
+import useAssetStore, { Assets } from "@/hooks/asset-store";
 
 export default function HomePage() {
+  const { asset, setAsset } = useAssetStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -26,14 +28,15 @@ export default function HomePage() {
     <div className="flex flex-col gap-1 w-full h-full my-2">
       <div className="flex flex-row gap-1 border border-white/10 bg-black w-full h-16 rounded-lg">
         <div className="my-auto">
-          <Select defaultValue="light">
+          <Select defaultValue={asset} onValueChange={(value) => setAsset(value as Assets)}
+          >
             <SelectTrigger className="mx-2 px-4 border-white">
               <SelectValue placeholder="Theme" />
             </SelectTrigger>
             <SelectContent className="bg-white/5 backdrop-blur-sm border-white/5 text-white">
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
+              {Object.keys(Assets).map(asset => {
+                return <SelectItem key={asset} value={asset}> {asset} </SelectItem>
+              })}
             </SelectContent>
           </Select>
         </div>

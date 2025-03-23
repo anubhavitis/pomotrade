@@ -1,5 +1,6 @@
 // hooks/useHyperliquid.js
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
+import useAssetStore, { AssetStore } from "./asset-store";
 
 export interface CandleData {
   t: number; // open millis
@@ -21,38 +22,46 @@ export interface AllMidData {
 }
 
 export function useHyperliquidWebSocket() {
+  const asset = useAssetStore((state: AssetStore) => state.asset);
+  const wsRef = useRef<WebSocket | null>(null);
   const [wsData, setWsData] = useState<any>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const connect = useCallback(() => {
     try {
+      // Close existing connection if any
+      if (wsRef.current) {
+        wsRef.current.close();
+      }
+
       const ws = new WebSocket("wss://api.hyperliquid.xyz/ws");
+      wsRef.current = ws;
 
       ws.onopen = () => {
         setIsConnected(true);
         setError(null);
         console.log("Connected to Hyperliquid WebSocket");
 
-        // Subscribe to candles for BTC
+        // Subscribe to candles for the current asset
         const subscribeMessage = {
           method: "subscribe",
           subscription: {
             type: "candle",
-            coin: "BTC",
+            coin: asset.toString(),
             interval: "1m",
           },
         };
 
         ws.send(JSON.stringify(subscribeMessage));
-        console.log("Sent subscription:", subscribeMessage);
+        console.log("Sent subscription for asset:", asset, ":", subscribeMessage);
       };
 
       ws.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
           console.log("Received WebSocket message:", data);
-          setWsData(data); // Store all incoming messages
+          setWsData(data);
         } catch (err) {
           console.error("Error parsing WebSocket message:", err);
         }
@@ -68,20 +77,25 @@ export function useHyperliquidWebSocket() {
         setError("WebSocket connection closed");
         console.log("WebSocket connection closed");
 
-        // Attempt to reconnect after 5 seconds
-        setTimeout(() => {
-          connect();
-        }, 5000);
+        // Only attempt to reconnect if the connection was closed unexpectedly
+        // and we're still subscribed to the same asset
+        if (wsRef.current === ws) {
+          setTimeout(() => {
+            connect();
+          }, 5000);
+        }
       };
 
       return () => {
-        ws.close();
+        if (wsRef.current) {
+          wsRef.current.close();
+        }
       };
     } catch (err) {
       setError("Failed to connect to WebSocket");
       console.error("Connection error:", err);
     }
-  }, []);
+  }, [asset]); // Add asset to dependency array
 
   useEffect(() => {
     const cleanup = connect();
