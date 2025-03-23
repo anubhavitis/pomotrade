@@ -42,11 +42,6 @@ const TradingViewWidget: React.FC = () => {
       return;
     }
 
-    // Clear any existing chart
-    if (chartRef.current) {
-      chartRef.current.remove();
-    }
-
     const chart = createChart(containerRef.current, chartOptions);
     chartRef.current = chart;
 

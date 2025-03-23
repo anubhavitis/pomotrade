@@ -14,7 +14,7 @@ export default function OrderBook() {
         return num.toFixed(num >= 1 ? 5 : 5);
     };
 
-    const processLevels = (levels: OrderBookLevel[] | undefined, n: number = 12): EnhancedOrderBookLevel[] => {
+    const processLevels = (levels: OrderBookLevel[] | undefined): EnhancedOrderBookLevel[] => {
         if (!levels) return [];
         let total = 0;
         return levels.map(level => {
@@ -28,13 +28,15 @@ export default function OrderBook() {
     };
 
     const sortBids = (bids: OrderBookLevel[] | undefined, n: number = 14): EnhancedOrderBookLevel[] => {
-        const sorted = (bids?.slice().sort((a, b) => a.n - b.n) || []).slice(0, n);
-        return processLevels(sorted);
+        const sorted = bids?.slice().sort((a, b) => parseFloat(b.sz) - parseFloat(a.sz)).slice(0, n);
+        const processed = processLevels(sorted);
+        return processed;
     };
 
     const sortAsks = (asks: OrderBookLevel[] | undefined, n: number = 14): EnhancedOrderBookLevel[] => {
-        const sorted = (asks?.slice().sort((a, b) => b.n - a.n) || []).slice(0, n);
-        return processLevels(sorted);
+        const sorted = asks?.slice().sort((a, b) => parseFloat(a.sz) - parseFloat(b.sz)).slice(0, n);
+        const processed = processLevels(sorted);
+        return processed;
     };
 
     const bids = useMemo(() => sortBids(orderbookData?.data?.levels?.[0]), [orderbookData?.data?.levels]);
@@ -56,7 +58,7 @@ export default function OrderBook() {
                     >
                         <div className="text-[#ff4976]">{parseFloat(ask.px).toLocaleString()}</div>
                         <div className="text-gray-300">{formatNumber(parseFloat(ask.sz))}</div>
-                        <div className="text-gray-300">{formatNumber(ask.n)}</div>
+                        <div className="text-gray-300">{formatNumber(ask.total)}</div>
                     </div>
                 ))}
             </div>
@@ -75,7 +77,7 @@ export default function OrderBook() {
                     >
                         <div className="text-[#00c087]">{parseFloat(bid.px).toLocaleString()}</div>
                         <div className="text-gray-300">{formatNumber(parseFloat(bid.sz))}</div>
-                        <div className="text-gray-300">{formatNumber(bid.n)}</div>
+                        <div className="text-gray-300">{formatNumber(bid.total)}</div>
                     </div>
                 ))}
             </div>
