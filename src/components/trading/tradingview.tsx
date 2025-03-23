@@ -29,12 +29,18 @@ const TradingViewWidget: React.FC = () => {
         style: 1,
       },
     },
+
     timeScale: {
       borderColor: 'rgba(50, 50, 55, 0.8)',
       timeVisible: true,
-      secondsVisible: false,
+      secondsVisible: true,
+      tickMarkFormatter: (time: number) => {
+        const date = new Date(time * 1000);
+        return date.toLocaleTimeString();
+      },
     },
   };
+
 
   // Initialize the chart
   useEffect(() => {

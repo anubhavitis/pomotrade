@@ -3,26 +3,28 @@ import React from 'react';
 const Footer: React.FC = () => {
     return (
         <div className="relative z-1 pointer-events-auto">
-            <div className="m-2 flex justify-center items-center">
-                <div className="font-medium text-gray-600">
-                    Charts are powered by
-                </div>
-                <a
-                    href="https://tradingview.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline ml-1 text-gray-600 hover:text-white transition-colors cursor-pointer"
-                >
-                    TradingView
-                </a>
-            </div>
 
-            <footer className="w-full bg-white/2 backdrop-blur-sm mt-auto py-2 relative">
+            <footer className="w-full bg-black/5 backdrop-blur-md mt-auto relative rounded-lg">
                 <div className="container mx-auto px-4">
                     <div className="flex flex-col items-center justify-center">
-                        <p className="text-gray-600 text-center font-medium">
-                            © 2025, pomotrade.com
-                        </p>
+                        <div className="flex flex-row items-center justify-center">
+                            <div className="m-2 flex justify-center items-center">
+                                <div className="font-medium text-gray-600">
+                                    Charts are powered by
+                                </div>
+                                <a
+                                    href="https://tradingview.com"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="underline ml-1 text-gray-600 hover:text-white transition-colors cursor-pointer"
+                                >
+                                    TradingView
+                                </a>
+                            </div>
+                            <p className="text-gray-600 text-center font-medium">
+                                |  © 2025, pomotrade.com
+                            </p>
+                        </div>
 
                         {/* Commented out links and social icons for now
                     <div className="flex space-x-8 mb-4">
