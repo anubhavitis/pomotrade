@@ -1,10 +1,13 @@
 // TradingViewWidget.jsx
 import React, { memo, useEffect, useRef, useState } from "react";
-import { CandlestickSeries, ChartOptions, ColorType, createChart, DeepPartial } from 'lightweight-charts';
+import { CandlestickSeries, ChartOptions, ColorType, createChart, DeepPartial, Time } from 'lightweight-charts';
 import { useHyperliquidWebSocket } from "@/hooks/use-websocket";
 import { AssetStore } from "@/hooks/asset-store";
 import useAssetStore from "@/hooks/asset-store";
 import { fetchHistoricalCandles, formatCandleData } from "@/hooks/historical-chart";
+
+const VISIBLE_CANDLES = 50; // Number of candles visible at once
+const TOTAL_CANDLES = 500; // Total number of candles to fetch
 
 const TradingViewWidget: React.FC = () => {
   const asset = useAssetStore((state: AssetStore) => state.asset);
@@ -33,7 +36,6 @@ const TradingViewWidget: React.FC = () => {
         style: 1,
       },
     },
-
     timeScale: {
       borderColor: 'rgba(50, 50, 55, 0.8)',
       timeVisible: true,
@@ -42,9 +44,26 @@ const TradingViewWidget: React.FC = () => {
         const date = new Date(time * 1000);
         return date.toLocaleTimeString();
       },
+      rightOffset: 5,
+      barSpacing: 12,
+      minBarSpacing: 10,
+      fixLeftEdge: true,
+      fixRightEdge: true,
+      visible: true,
+      rightBarStaysOnScroll: true,
+    },
+    handleScroll: {
+      mouseWheel: true,
+      pressedMouseMove: true,
+      horzTouchDrag: true,
+      vertTouchDrag: true,
+    },
+    handleScale: {
+      axisPressedMouseMove: true,
+      mouseWheel: true,
+      pinch: true,
     },
   };
-
 
   // Initialize the chart
   useEffect(() => {
@@ -57,7 +76,6 @@ const TradingViewWidget: React.FC = () => {
       try {
         chartRef.current.remove();
       } catch (error) {
-        // Ignore errors from already disposed charts
         console.log('Chart already disposed');
       }
     }
@@ -86,18 +104,34 @@ const TradingViewWidget: React.FC = () => {
     };
 
     window.addEventListener('resize', handleResize);
-    handleResize(); // Call once to set initial size
+    handleResize();
     setChartInitialized(true);
 
-
     const loadHistoricalData = async () => {
-      console.log("loading historical data")
       try {
-        const response = await fetchHistoricalCandles("1m", 300);
+        const response = await fetchHistoricalCandles("1m", TOTAL_CANDLES);
         if (response) {
           const formattedData = formatCandleData(response);
-          console.log("formattedData", formattedData)
           setCandleData(formattedData);
+
+          // Set the visible range to show the most recent VISIBLE_CANDLES
+          if (formattedData.length > 0) {
+            const timeScale = chart.timeScale();
+            const lastTime = formattedData[formattedData.length - 1].time as Time;
+            const firstVisibleTime = (lastTime as number - (VISIBLE_CANDLES * 60)) as Time;
+
+            // First set the data
+            seriesRef.current.setData(formattedData);
+
+            // Then set the visible range to show the latest candles
+            timeScale.setVisibleRange({
+              from: firstVisibleTime,
+              to: lastTime
+            });
+
+            // Ensure the right edge stays fixed
+            timeScale.scrollToPosition(1, false);
+          }
         }
       } catch (error) {
         console.error("Error loading historical data:", error);
@@ -121,7 +155,6 @@ const TradingViewWidget: React.FC = () => {
     }
 
     try {
-      // Format the new candle data
       const timestamp = Math.floor(data.data.T / 1000);
       const formattedCandle = {
         time: timestamp,
@@ -131,17 +164,14 @@ const TradingViewWidget: React.FC = () => {
         close: Number(data.data.c)
       };
 
-      // Check if we already have a candle with this timestamp
       setCandleData(prevData => {
         const existingIndex = prevData.findIndex(candle => candle.time === timestamp);
 
         if (existingIndex >= 0) {
-          // Update existing candle
           const updatedData = [...prevData];
           updatedData[existingIndex] = formattedCandle;
           return updatedData;
         } else {
-          // Add new candle and sort by time
           const newData = [...prevData, formattedCandle];
           return newData.sort((a, b) => a.time - b.time);
         }
@@ -159,11 +189,6 @@ const TradingViewWidget: React.FC = () => {
 
     try {
       seriesRef.current.setData(candleData);
-
-      // Fit content to see all data
-      if (chartRef.current) {
-        chartRef.current.timeScale().fitContent();
-      }
     } catch (err) {
       console.error("Error updating chart data:", err);
     }

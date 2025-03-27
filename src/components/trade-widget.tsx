@@ -3,19 +3,30 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
+import { getBalances, Balance } from "@/hooks/get-balances";
+import useAssetStore from "@/hooks/asset-store";
+import { AssetStore } from "@/hooks/asset-store";
 export default function TradeWidget() {
   const [activeTab, setActiveTab] = useState<"buy" | "sell">("buy");
   const [price, setPrice] = useState("₹1,201");
-  const [quantity, setQuantity] = useState("0.00057 BTC");
   const [totalValue, setTotalValue] = useState("₹10,00,005");
   const [approximateValue, setApproximateValue] = useState("₹98,00,000.03");
+  const [balance, setBalance] = useState<Balance | null>(null);
+  const asset = useAssetStore((state: AssetStore) => state.asset);
+  const [quantity, setQuantity] = useState("0.00057" + asset);
+
+
+  const balances = async () => {
+    const balances = await getBalances();
+    setBalance(balances?.get("USDC") || null);
+  }
 
   // const priceActionText = activeTab === "buy" ? "Buy" : "Sell";
 
   useEffect(() => {
     setApproximateValue("₹98,00,000.03");
     setTotalValue("₹10,00,005");
+    balances();
   }, []);
 
 
@@ -47,11 +58,11 @@ export default function TradeWidget() {
       </div>
 
       <div className="text-white md:p-3 h-full bg-black flex flex-col justify-around">
-        {/* <div className="md:mb-4">
+        <div className="md:mb-4">
           <p className="text-base">
-            Order Type: <span className="font-medium">Limit</span>
+            Balance: <span className="font-medium"> {balance?.total} USDC </span>
           </p>
-        </div> */}
+        </div>
 
         <div className="mb-4">
           <p className="text-base mb-2">At Price</p>
@@ -75,7 +86,7 @@ export default function TradeWidget() {
         <div className="mb-4">
           <div className="flex justify-between mb-2">
             <p className="text-base">Quantity</p>
-            <p className="text-slate-400">Min 0.00004 BTC</p>
+            <p className="text-slate-400">Min 0.00004 {asset}</p>
           </div>
           <Input
             value={quantity}
@@ -84,23 +95,6 @@ export default function TradeWidget() {
           />
         </div>
 
-        <div className="mb-4">
-          <p className="text-base mb-2">Total INR Value</p>
-          <div className="bg-white/10 border border-slate-700 text-white text-base py-4 px-3 rounded-md w-full">
-            <span className="font-medium">{totalValue}</span>
-            <span className="text-slate-400 ml-2">≈ {approximateValue}</span>
-          </div>
-        </div>
-
-        {/* <div className="flex justify-end mb-6">
-          <button className="text-slate-400">View fee breakup</button>
-        </div> */}
-
-        <div className="mb-6">
-          <p className="text-base">
-            Available balance : <span className="font-medium">₹1,00,500</span>
-          </p>
-        </div>
 
         <Button
           className={`w-full rounded-none ${activeTab === "buy"
