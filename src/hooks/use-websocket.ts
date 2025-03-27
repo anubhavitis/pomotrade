@@ -1,5 +1,5 @@
 // hooks/useHyperliquid.js
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import useAssetStore, { AssetStore } from "./asset-store";
 
 export interface CandleData {
@@ -15,35 +15,27 @@ export interface CandleData {
   n: number; // number of trades
 }
 
-export interface AllMidData {
-  coin: string;
-  mid: string;
-  timestamp: number;
+export interface WebSocketMessage {
+  channel: string;
+  data: CandleData;
 }
 
 export function useHyperliquidWebSocket() {
   const asset = useAssetStore((state: AssetStore) => state.asset);
-  const wsRef = useRef<WebSocket | null>(null);
-  const [wsData, setWsData] = useState<any>(null);
+  const [wsData, setWsData] = useState<WebSocketMessage | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const connect = useCallback(() => {
     try {
-      // Close existing connection if any
-      if (wsRef.current) {
-        wsRef.current.close();
-      }
-
       const ws = new WebSocket("wss://api.hyperliquid.xyz/ws");
-      wsRef.current = ws;
 
       ws.onopen = () => {
         setIsConnected(true);
         setError(null);
         console.log("Connected to Hyperliquid WebSocket");
 
-        // Subscribe to candles for the current asset
+        // Subscribe to candles for BTC
         const subscribeMessage = {
           method: "subscribe",
           subscription: {
@@ -54,12 +46,13 @@ export function useHyperliquidWebSocket() {
         };
 
         ws.send(JSON.stringify(subscribeMessage));
-        // console.log("Sent subscription for asset:", asset, ":", subscribeMessage);
+        console.log("Sent subscription:", subscribeMessage);
       };
 
       ws.onmessage = (event) => {
         try {
-          const data = JSON.parse(event.data);
+          const data = JSON.parse(event.data) as WebSocketMessage;
+          console.log("Received WebSocket message:", data);
           setWsData(data);
         } catch (err) {
           console.error("Error parsing WebSocket message:", err);
@@ -76,25 +69,20 @@ export function useHyperliquidWebSocket() {
         setError("WebSocket connection closed");
         console.log("WebSocket connection closed");
 
-        // Only attempt to reconnect if the connection was closed unexpectedly
-        // and we're still subscribed to the same asset
-        if (wsRef.current === ws) {
-          setTimeout(() => {
-            connect();
-          }, 5000);
-        }
+        // Attempt to reconnect after 5 seconds
+        setTimeout(() => {
+          connect();
+        }, 5000);
       };
 
       return () => {
-        if (wsRef.current) {
-          wsRef.current.close();
-        }
+        ws.close();
       };
     } catch (err) {
       setError("Failed to connect to WebSocket");
       console.error("Connection error:", err);
     }
-  }, [asset]); // Add asset to dependency array
+  }, [asset]);
 
   useEffect(() => {
     const cleanup = connect();

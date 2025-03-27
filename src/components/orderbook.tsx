@@ -1,86 +1,69 @@
 "use client";
 
-import { getOrderbook, OrderBookLevel } from "@/hooks/order-book";
 import { useMemo } from "react";
+import { useOrderbook, OrderBookLevel } from "@/hooks/order-book";
 
 interface EnhancedOrderBookLevel extends OrderBookLevel {
     total: number;
 }
 
 export default function OrderBook() {
-    const { orderbookData, isConnected, error } = getOrderbook();
+    const { orderbookData } = useOrderbook();
 
-    const formatNumber = (num: number): string => {
-        return num.toFixed(num >= 1 ? 5 : 5);
-    };
+    const sortBids = useMemo(() => (bids: OrderBookLevel[] | undefined, n: number = 15): EnhancedOrderBookLevel[] => {
+        const sorted = (bids?.slice().sort((a: OrderBookLevel, b: OrderBookLevel) =>
+            parseFloat(b.px) - parseFloat(a.px)) || []).slice(0, n);
 
-    const processLevels = (levels: OrderBookLevel[] | undefined): EnhancedOrderBookLevel[] => {
-        if (!levels) return [];
         let total = 0;
-        return levels.map(level => {
-            const size = parseFloat(level.sz);
-            total += size;
+        return sorted.map(bid => {
+            total += parseFloat(bid.sz);
             return {
-                ...level,
+                ...bid,
                 total
             };
         });
-    };
+    }, []);
 
-    const sortBids = (bids: OrderBookLevel[] | undefined, n: number = 14): EnhancedOrderBookLevel[] => {
-        const sorted = bids?.slice().sort((a, b) => parseFloat(b.sz) - parseFloat(a.sz)).slice(0, n);
-        const processed = processLevels(sorted);
-        return processed;
-    };
+    const sortAsks = useMemo(() => (asks: OrderBookLevel[] | undefined, n: number = 15): EnhancedOrderBookLevel[] => {
+        const sorted = (asks?.slice().sort((a: OrderBookLevel, b: OrderBookLevel) =>
+            parseFloat(a.px) - parseFloat(b.px)) || []).slice(0, n);
 
-    const sortAsks = (asks: OrderBookLevel[] | undefined, n: number = 14): EnhancedOrderBookLevel[] => {
-        const sorted = asks?.slice().sort((a, b) => parseFloat(a.sz) - parseFloat(b.sz)).slice(0, n);
-        const processed = processLevels(sorted);
-        return processed;
-    };
+        let total = 0;
+        return sorted.map(ask => {
+            total += parseFloat(ask.sz);
+            return {
+                ...ask,
+                total
+            };
+        });
+    }, []);
 
-    const bids = useMemo(() => sortBids(orderbookData?.data?.levels?.[0]), [orderbookData?.data?.levels]);
-    const asks = useMemo(() => sortAsks(orderbookData?.data?.levels?.[1]), [orderbookData?.data?.levels]);
+    const bids = useMemo(() => sortBids(orderbookData?.data?.levels?.[0]), [orderbookData?.data?.levels, sortBids]);
+    const asks = useMemo(() => sortAsks(orderbookData?.data?.levels?.[1]), [orderbookData?.data?.levels, sortAsks]);
 
-    return (
-        <div className="flex flex-col h-full w-full rounded-lg bg-black text-sm border border-white/10">
-            <div className="px-4 py-2 flex flex-row justify-between text-gray-400 border-b border-gray-800">
-                <div>Price</div>
-                <div>Size</div>
-                <div>Total</div>
-            </div>
-
-            <div className="w-full overflow-y-auto">
-                {asks.reverse().map((ask, index) => (
-                    <div
-                        key={`ask-${index}`}
-                        className="flex flex-row justify-between px-4 py-0.5 hover:bg-white/5"
-                    >
-                        <div className="text-[#ff4976]">{parseFloat(ask.px).toLocaleString()}</div>
-                        <div className="text-gray-300">{formatNumber(parseFloat(ask.sz))}</div>
-                        <div className="text-gray-300">{formatNumber(ask.total)}</div>
-                    </div>
-                ))}
-            </div>
-
-            <div className="px-4 py-1 flex justify-between border-y border-gray-800">
-                <div>Spread</div>
-                <div>{Math.abs(parseFloat(asks[asks.length - 1]?.px) - parseFloat(bids[0]?.px)).toFixed(1)}</div>
-                <div>{((Math.abs(parseFloat(asks[asks.length - 1]?.px) - parseFloat(bids[0]?.px)) / parseFloat(asks[asks.length - 1]?.px) * 100)).toFixed(3)}%</div>
-            </div>
-
-            <div className="w-full overflow-y-auto">
-                {bids.map((bid, index) => (
-                    <div
-                        key={`bid-${index}`}
-                        className="flex flex-row justify-between px-4 py-0.5 hover:bg-white/5"
-                    >
-                        <div className="text-[#00c087]">{parseFloat(bid.px).toLocaleString()}</div>
-                        <div className="text-gray-300">{formatNumber(parseFloat(bid.sz))}</div>
-                        <div className="text-gray-300">{formatNumber(bid.total)}</div>
-                    </div>
-                ))}
-            </div>
+    return <div className="flex flex-col h-full w-full rounded-lg border border-white/10 ">
+        <div className="px-2 pt-1 flex flex-row gap-2 justify-between rounded-md border-b border-white/10 bg-black/5 backdrop-blur-sm">
+            <div> price</div>
+            <div> size</div>
+            <div> total</div>
         </div>
-    );
+        <div className="w-full h-full overflow-y-auto border-b border-white/10">
+            {bids.map((bid: EnhancedOrderBookLevel, index: number) => (
+                <div key={`bid-${index}`} className="flex flex-row justify-between px-2 bg-red-500 ">
+                    <div>{bid.px}</div>
+                    <div>{bid.sz}</div>
+                    <div>{bid.total.toFixed(8)}</div>
+                </div>
+            ))}
+        </div>
+        <div className="w-full h-full overflow-y-auto">
+            {asks.map((ask: EnhancedOrderBookLevel, index: number) => (
+                <div key={`ask-${index}`} className="flex flex-row justify-between px-2 bg-green-500">
+                    <div>{ask.px}</div>
+                    <div>{ask.sz}</div>
+                    <div>{ask.total.toFixed(8)}</div>
+                </div>
+            ))}
+        </div>
+    </div>;
 }

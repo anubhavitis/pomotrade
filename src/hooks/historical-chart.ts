@@ -1,4 +1,5 @@
-import useAssetStore, { AssetStore } from "./asset-store";
+import useAssetStore from "./asset-store";
+import { Time } from 'lightweight-charts';
 
 type Interval = "1m" | "15m" | "1hr" | "1d";
 
@@ -22,11 +23,17 @@ export interface CandleData {
     n: number; // number of trades
 }
 
+export interface FormattedCandleData {
+    time: Time;
+    open: number;
+    high: number;
+    low: number;
+    close: number;
+}
 
 export async function fetchHistoricalCandles(interval: Interval = "1m", limit: number = 1000): Promise<CandleData[]> {
     const asset = useAssetStore.getState().asset;
     const endTime = Date.now();
-
 
     // Calculate start time based on interval and desired number of candles
     const intervalMs = INTERVAL_MILLISECONDS[interval];
@@ -63,9 +70,9 @@ export async function fetchHistoricalCandles(interval: Interval = "1m", limit: n
 }
 
 // Helper function to format candle data for the chart
-export function formatCandleData(rawData: CandleData[]) {
+export function formatCandleData(rawData: CandleData[]): FormattedCandleData[] {
     return rawData.map(candle => ({
-        time: Math.floor(candle.t / 1000),
+        time: Math.floor(candle.t / 1000) as Time,
         open: Number(candle.o),
         high: Number(candle.h),
         low: Number(candle.l),

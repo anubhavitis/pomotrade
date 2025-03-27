@@ -1,10 +1,10 @@
 // TradingViewWidget.jsx
 import React, { memo, useEffect, useRef, useState } from "react";
-import { CandlestickSeries, ChartOptions, ColorType, createChart, DeepPartial, Time } from 'lightweight-charts';
+import { CandlestickSeries, ChartOptions, ColorType, createChart, DeepPartial, IChartApi, ISeriesApi, Time } from 'lightweight-charts';
 import { useHyperliquidWebSocket } from "@/hooks/use-websocket";
 import { AssetStore } from "@/hooks/asset-store";
 import useAssetStore from "@/hooks/asset-store";
-import { fetchHistoricalCandles, formatCandleData } from "@/hooks/historical-chart";
+import { fetchHistoricalCandles, formatCandleData, FormattedCandleData } from "@/hooks/historical-chart";
 
 const VISIBLE_CANDLES = 50; // Number of candles visible at once
 const TOTAL_CANDLES = 500; // Total number of candles to fetch
@@ -12,58 +12,11 @@ const TOTAL_CANDLES = 500; // Total number of candles to fetch
 const TradingViewWidget: React.FC = () => {
   const asset = useAssetStore((state: AssetStore) => state.asset);
   const containerRef = useRef<HTMLDivElement>(null);
-  const chartRef = useRef<any>(null);
-  const seriesRef = useRef<any>(null);
-  const [candleData, setCandleData] = useState<any[]>([]);
+  const chartRef = useRef<IChartApi | null>(null);
+  const seriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
+  const [candleData, setCandleData] = useState<FormattedCandleData[]>([]);
   const [chartInitialized, setChartInitialized] = useState(false);
   const { data, isConnected, error } = useHyperliquidWebSocket();
-
-  const chartOptions: DeepPartial<ChartOptions> = {
-    layout: {
-      textColor: 'white',
-      background: {
-        type: ColorType.Solid,
-        color: 'transparent'
-      }
-    },
-    grid: {
-      vertLines: {
-        color: 'rgba(30, 30, 35, 0.5)',
-        style: 1,
-      },
-      horzLines: {
-        color: 'rgba(30, 30, 35, 0.5)',
-        style: 1,
-      },
-    },
-    timeScale: {
-      borderColor: 'rgba(50, 50, 55, 0.8)',
-      timeVisible: true,
-      secondsVisible: true,
-      tickMarkFormatter: (time: number) => {
-        const date = new Date(time * 1000);
-        return date.toLocaleTimeString();
-      },
-      rightOffset: 5,
-      barSpacing: 12,
-      minBarSpacing: 10,
-      fixLeftEdge: true,
-      fixRightEdge: true,
-      visible: true,
-      rightBarStaysOnScroll: true,
-    },
-    handleScroll: {
-      mouseWheel: true,
-      pressedMouseMove: true,
-      horzTouchDrag: true,
-      vertTouchDrag: true,
-    },
-    handleScale: {
-      axisPressedMouseMove: true,
-      mouseWheel: true,
-      pinch: true,
-    },
-  };
 
   // Initialize the chart
   useEffect(() => {
@@ -71,12 +24,59 @@ const TradingViewWidget: React.FC = () => {
       return;
     }
 
+    const chartOptions: DeepPartial<ChartOptions> = {
+      layout: {
+        textColor: 'white',
+        background: {
+          type: ColorType.Solid,
+          color: 'transparent'
+        }
+      },
+      grid: {
+        vertLines: {
+          color: 'rgba(30, 30, 35, 0.5)',
+          style: 1,
+        },
+        horzLines: {
+          color: 'rgba(30, 30, 35, 0.5)',
+          style: 1,
+        },
+      },
+      timeScale: {
+        borderColor: 'rgba(50, 50, 55, 0.8)',
+        timeVisible: true,
+        secondsVisible: true,
+        tickMarkFormatter: (time: number) => {
+          const date = new Date(time * 1000);
+          return date.toLocaleTimeString();
+        },
+        rightOffset: 5,
+        barSpacing: 12,
+        minBarSpacing: 10,
+        fixLeftEdge: true,
+        fixRightEdge: true,
+        visible: true,
+        rightBarStaysOnScroll: true,
+      },
+      handleScroll: {
+        mouseWheel: true,
+        pressedMouseMove: true,
+        horzTouchDrag: true,
+        vertTouchDrag: true,
+      },
+      handleScale: {
+        axisPressedMouseMove: true,
+        mouseWheel: true,
+        pinch: true,
+      },
+    };
+
     // Clear existing chart if it exists
     if (chartRef.current) {
       try {
         chartRef.current.remove();
       } catch (error) {
-        console.log('Chart already disposed');
+        console.log('Chart already disposed', error);
       }
     }
 
@@ -121,7 +121,7 @@ const TradingViewWidget: React.FC = () => {
             const firstVisibleTime = (lastTime as number - (VISIBLE_CANDLES * 60)) as Time;
 
             // First set the data
-            seriesRef.current.setData(formattedData);
+            seriesRef.current?.setData(formattedData);
 
             // Then set the visible range to show the latest candles
             timeScale.setVisibleRange({
@@ -146,7 +146,7 @@ const TradingViewWidget: React.FC = () => {
         chartRef.current.remove();
       }
     };
-  }, [asset]);
+  }, [asset]); // Removed chartOptions from dependencies
 
   // Process incoming WebSocket data
   useEffect(() => {
@@ -155,8 +155,8 @@ const TradingViewWidget: React.FC = () => {
     }
 
     try {
-      const timestamp = Math.floor(data.data.T / 1000);
-      const formattedCandle = {
+      const timestamp = Math.floor(data.data.T / 1000) as Time;
+      const formattedCandle: FormattedCandleData = {
         time: timestamp,
         open: Number(data.data.o),
         high: Number(data.data.h),
@@ -173,7 +173,7 @@ const TradingViewWidget: React.FC = () => {
           return updatedData;
         } else {
           const newData = [...prevData, formattedCandle];
-          return newData.sort((a, b) => a.time - b.time);
+          return newData.sort((a, b) => (a.time as number) - (b.time as number));
         }
       });
     } catch (err) {
@@ -204,7 +204,7 @@ const TradingViewWidget: React.FC = () => {
       <div ref={containerRef} className="h-full w-full" />
       {!isConnected && error && (
         <div className="absolute top-0 left-0 right-0 bg-red-500/80 text-white text-sm p-1 text-center">
-          WebSocket disconnected: {typeof error === 'string' ? error : (error as any).message || 'Unknown error'}
+          WebSocket disconnected: {typeof error === 'string' ? error : (error as Error).message || 'Unknown error'}
         </div>
       )}
       {(candleData.length === 0 && isConnected) && (

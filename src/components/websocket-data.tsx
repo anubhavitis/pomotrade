@@ -18,7 +18,7 @@ interface CandleData {
   n: number;    // Number of trades
 }
 
-interface SubscriptionResponseData {
+export interface SubscriptionResponseData {
   method: string;
   subscription: {
     type: string;
@@ -27,14 +27,14 @@ interface SubscriptionResponseData {
   }
 }
 
-interface WebSocketMessage {
+export interface WebSocketMessage {
   channel: Channel;
   data: CandleData;
 }
 
 
 export default function WebSocketData() {
-  const { data, isConnected, error } = useHyperliquidWebSocket();
+  const { data } = useHyperliquidWebSocket();
 
   useEffect(() => {
     console.log("WebSocket Data Updated:", data);

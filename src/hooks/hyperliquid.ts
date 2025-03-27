@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import hl from "hyperliquid";
 
 export function useHyperliquid() {
-  const [sdk, setSdk] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
   const [candleData, setCandleData] = useState({});
   // Add other state as needed
@@ -29,5 +28,5 @@ export function useHyperliquid() {
     initHyperliquid();
   }, []);
 
-  return { sdk, isConnected, candleData };
+  return { isConnected, candleData };
 }

@@ -9,8 +9,6 @@ import { AssetStore } from "@/hooks/asset-store";
 export default function TradeWidget() {
   const [activeTab, setActiveTab] = useState<"buy" | "sell">("buy");
   const [price, setPrice] = useState("₹1,201");
-  const [totalValue, setTotalValue] = useState("₹10,00,005");
-  const [approximateValue, setApproximateValue] = useState("₹98,00,000.03");
   const [balance, setBalance] = useState<Balance | null>(null);
   const asset = useAssetStore((state: AssetStore) => state.asset);
   const [quantity, setQuantity] = useState("0.00057" + asset);
@@ -21,11 +19,7 @@ export default function TradeWidget() {
     setBalance(balances?.get("USDC") || null);
   }
 
-  // const priceActionText = activeTab === "buy" ? "Buy" : "Sell";
-
   useEffect(() => {
-    setApproximateValue("₹98,00,000.03");
-    setTotalValue("₹10,00,005");
     balances();
   }, []);
 
