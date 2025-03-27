@@ -22,14 +22,14 @@ export default function TradeWidget() {
   return (
 
     <div className="flex flex-col justify-between overflow-hidden h-full w-full rounded-lg 
-    border border-white/10 bg-black">
+    border border-white/10 ">
       <div className="flex flex-row">
         <Button
           variant="ghost"
           onClick={() => setActiveTab("buy")}
-          className={` w-full text-center rounded-none font-medium cursor-pointer ${activeTab === "buy"
+          className={`w-full text-center font-medium cursor-pointer ${activeTab === "buy"
             ? "bg-black/5 backdrop-blur-sm text-emerald-500 font-bold hover:text-emerald-500"
-            : "bg-white/5 backdrop-blur-sm hover:bg-white/10 "
+            : "bg-white/5 hover:bg-white/10"
             } `}
         >
           Buy
@@ -37,21 +37,21 @@ export default function TradeWidget() {
         <Button
           variant="ghost"
           onClick={() => setActiveTab("sell")}
-          className={` w-full text-center font-medium cursor-pointer rounded-none ${activeTab === "sell"
+          className={`w-full text-center font-medium cursor-pointer ${activeTab === "sell"
             ? "bg-black/5 backdrop-blur-md text-rose-500 font-bold hover:text-rose-500"
-            : "bg-white/5 backdrop-blur-sm hover:bg-white/10   "
+            : "bg-white/5 hover:bg-white/10"
             }`}
         >
           Sell
         </Button>
       </div>
 
-      <div className="text-white md:p-3 h-full">
-        <div className="md:mb-4">
+      <div className="text-white md:p-3 h-full bg-black flex flex-col justify-around">
+        {/* <div className="md:mb-4">
           <p className="text-base">
             Order Type: <span className="font-medium">Limit</span>
           </p>
-        </div>
+        </div> */}
 
         <div className="mb-4">
           <p className="text-base mb-2">At Price</p>
@@ -92,9 +92,9 @@ export default function TradeWidget() {
           </div>
         </div>
 
-        <div className="flex justify-end mb-6">
+        {/* <div className="flex justify-end mb-6">
           <button className="text-slate-400">View fee breakup</button>
-        </div>
+        </div> */}
 
         <div className="mb-6">
           <p className="text-base">

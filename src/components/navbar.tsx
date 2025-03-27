@@ -21,7 +21,7 @@ const Header = () => {
 };
 
 const NavbarWrapper = ({ children }: { children: React.ReactNode }) => (
-  <nav className="flex sticky top-2 z-10 bg-white/5 backdrop-blur-md px-4 py-2 rounded-lg justify-between items-center">
+  <nav className="flex sticky top-2 z-2 bg-white/5 backdrop-blur-md px-4 py-2 rounded-lg justify-between items-center">
     <Header />
     {children}
   </nav>

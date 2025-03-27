@@ -2,9 +2,8 @@ import React from 'react';
 
 const Footer: React.FC = () => {
     return (
-        <div className="relative z-1 pointer-events-auto">
-
-            <footer className="w-full bg-black/5 backdrop-blur-md mt-auto relative rounded-lg">
+        <div className="z-10 pointer-events-auto">
+            <footer className="w-full bg-black/5 backdrop-blur-md relative rounded-lg">
                 <div className="container mx-auto px-4">
                     <div className="flex flex-col items-center justify-center">
                         <div className="flex flex-row items-center justify-center">

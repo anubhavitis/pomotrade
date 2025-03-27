@@ -54,13 +54,12 @@ export function useHyperliquidWebSocket() {
         };
 
         ws.send(JSON.stringify(subscribeMessage));
-        console.log("Sent subscription for asset:", asset, ":", subscribeMessage);
+        // console.log("Sent subscription for asset:", asset, ":", subscribeMessage);
       };
 
       ws.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
-          console.log("Received WebSocket message:", data);
           setWsData(data);
         } catch (err) {
           console.error("Error parsing WebSocket message:", err);

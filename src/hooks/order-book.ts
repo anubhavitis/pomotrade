@@ -50,7 +50,7 @@ export function getOrderbook() {
                 };
 
                 ws.send(JSON.stringify(subscribeMessage));
-                console.log("Sent orderbook subscription for asset:", asset, ":", subscribeMessage);
+                // console.log("Sent orderbook subscription for asset:", asset, ":", subscribeMessage);
             };
 
             ws.onmessage = (event) => {
@@ -58,10 +58,10 @@ export function getOrderbook() {
                     const data = JSON.parse(event.data);
                     // Only update state if the data is for the current asset
                     if (data.data?.coin === asset) {
-                        console.log("Received Orderbook WebSocket message for", asset, ":", data);
+                        // console.log("Received Orderbook WebSocket message for", asset, ":", data);
                         setWsData(data);
                     } else {
-                        console.log("Received Orderbook WebSocket message for", data.data?.coin, ":", data);
+                        // console.log("Received Orderbook WebSocket message for", data.data?.coin, ":", data);
                     }
                 } catch (err) {
                     console.error("Error parsing WebSocket message:", err);

@@ -2,8 +2,12 @@
 import React, { memo, useEffect, useRef, useState } from "react";
 import { CandlestickSeries, ChartOptions, ColorType, createChart, DeepPartial } from 'lightweight-charts';
 import { useHyperliquidWebSocket } from "@/hooks/use-websocket";
+import { AssetStore } from "@/hooks/asset-store";
+import useAssetStore from "@/hooks/asset-store";
+import { fetchHistoricalCandles, formatCandleData } from "@/hooks/historical-chart";
 
 const TradingViewWidget: React.FC = () => {
+  const asset = useAssetStore((state: AssetStore) => state.asset);
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<any>(null);
   const seriesRef = useRef<any>(null);
@@ -48,6 +52,16 @@ const TradingViewWidget: React.FC = () => {
       return;
     }
 
+    // Clear existing chart if it exists
+    if (chartRef.current) {
+      try {
+        chartRef.current.remove();
+      } catch (error) {
+        // Ignore errors from already disposed charts
+        console.log('Chart already disposed');
+      }
+    }
+
     const chart = createChart(containerRef.current, chartOptions);
     chartRef.current = chart;
 
@@ -75,13 +89,30 @@ const TradingViewWidget: React.FC = () => {
     handleResize(); // Call once to set initial size
     setChartInitialized(true);
 
+
+    const loadHistoricalData = async () => {
+      console.log("loading historical data")
+      try {
+        const response = await fetchHistoricalCandles("1m", 300);
+        if (response) {
+          const formattedData = formatCandleData(response);
+          console.log("formattedData", formattedData)
+          setCandleData(formattedData);
+        }
+      } catch (error) {
+        console.error("Error loading historical data:", error);
+      }
+    };
+
+    loadHistoricalData();
+
     return () => {
       window.removeEventListener('resize', handleResize);
       if (chartRef.current) {
         chartRef.current.remove();
       }
     };
-  }, []); // Run only once on mount
+  }, [asset]);
 
   // Process incoming WebSocket data
   useEffect(() => {
@@ -90,7 +121,6 @@ const TradingViewWidget: React.FC = () => {
     }
 
     try {
-
       // Format the new candle data
       const timestamp = Math.floor(data.data.T / 1000);
       const formattedCandle = {
@@ -138,6 +168,11 @@ const TradingViewWidget: React.FC = () => {
       console.error("Error updating chart data:", err);
     }
   }, [candleData, chartInitialized]);
+
+  // Clear candle data when asset changes
+  useEffect(() => {
+    setCandleData([]);
+  }, [asset]);
 
   return (
     <div className="h-full w-full rounded-lg overflow-hidden border border-white/10 bg-black/20 backdrop-blur-sm relative">
