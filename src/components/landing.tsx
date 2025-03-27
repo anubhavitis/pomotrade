@@ -9,7 +9,7 @@ function Landing() {
         </p>
         <p className="w-5/6 lg:w-full text-sm sm:text-md md:text-base text-stone-500">
           Transform your trading approach with AI-powered insights and structured learning - because smart tools create smarter traders. <br />
-          Join our waitlist to get access to get early access to the platform.
+          Join our waitlist to get early access to the platform.
         </p>
       </div>
     </div>
